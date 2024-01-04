@@ -40,3 +40,17 @@ export async function updateUser({
     throw new Error(`Failed to onboard/update user: $(e.message)`);
   }
 }
+
+// function to retrieve the user from mongodb given a userId string
+export async function fetchUser(userId: string) {
+  try {
+    connectToDB();
+
+    // find the user in the database
+    const user = await User.findOne({ id: userId });
+
+    return user;
+  } catch (e: any) {
+    throw new Error(`Failed to fetch user: $(e.message)`);
+  }
+}
