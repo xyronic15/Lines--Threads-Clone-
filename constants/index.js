@@ -10,31 +10,31 @@ export const navLinks = [
     {
         label: "Home",
         path: "/",
-        icon: <GoHome />
+        icon: <GoHome size={24} />
     },
     {
         label: "Search",
         path: "/search",
-        icon: <HiMagnifyingGlass />
+        icon: <HiMagnifyingGlass size={24} />
     },
     {
         label: "Activity",
         path: "/activity",
-        icon: <FaRegHeart />
+        icon: <FaRegHeart size={24} />
     },
     {
         label: "Create Line",
         path: "/create-line",
-        icon: <BiSolidMessageSquareAdd />
+        icon: <BiSolidMessageSquareAdd size={24} />
     },
     {
         label: "Circles",
         path: "/circles",
-        icon: <PiCirclesThreeBold />
+        icon: <PiCirclesThreeBold size={24} />
     },
     {
         label: "Profile",
         path: "/profile",
-        icon: <FaRegUserCircle />
+        icon: <FaRegUserCircle size={24} />
     }
 ]
