@@ -11,7 +11,12 @@
 @layer components {
   /* main container */
   .main-container {
-    @apply flex flex-1 flex-col min-h-screen items-center bg-slate-950 px-6 pb-10 pt-28 max-md:pb-32 sm:px-10;
+    @apply flex flex-1 flex-col min-h-screen max-sm:items-center bg-slate-950 px-6 pb-10 pt-28 max-md:pb-32 sm:px-10;
+  }
+
+  /* topbar */
+  .topbar {
+    @apply fixed top-0 z-30 flex w-full items-center justify-between border-b-2 border-r-slate-800 bg-slate-950 pl-8 pr-16 py-3;
   }
 
   /* sidebar */
@@ -21,6 +26,6 @@
 
   /* sidebar link */
   .sidebar-link {
-    @apply relative flex justify-start align-middle gap-4 rounded-lg p-4 text-white hover:bg-slate-800 duration-200;
+    @apply relative flex justify-start align-middle gap-4 rounded-lg p-4 pr-16 text-white hover:bg-slate-800 duration-200;
   }
 }
