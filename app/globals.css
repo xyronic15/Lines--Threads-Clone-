@@ -16,7 +16,7 @@
 
   /* topbar */
   .topbar {
-    @apply fixed top-0 z-30 flex w-full items-center justify-between border-b-2 border-r-slate-800 bg-slate-950 pl-8 pr-16 py-3;
+    @apply fixed top-0 z-30 flex w-full items-center justify-between border-b-2 border-b-slate-800 bg-slate-950 px-8 md:pr-16 py-3;
   }
 
   /* sidebar */
@@ -27,5 +27,15 @@
   /* sidebar link */
   .sidebar-link {
     @apply relative flex justify-start align-middle gap-4 rounded-lg p-4 pr-16 text-white hover:bg-slate-800 duration-200;
+  }
+
+  /* bottombar */
+  .bottombar {
+    @apply fixed bottom-0 z-10 bg-slate-950 border-t-2 border-t-slate-800 w-full px-4 xs:px-7 md:hidden;
+  }
+
+  /* bottombar container */
+  .bottombar-container {
+    @apply flex flex-row justify-between gap-3 xs:gap-5;
   }
 }

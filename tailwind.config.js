@@ -6,7 +6,7 @@ module.exports = {
     './components/**/*.{ts,tsx}',
     './app/**/*.{ts,tsx}',
     './src/**/*.{ts,tsx}',
-	],
+  ],
   theme: {
     container: {
       center: true,
@@ -15,6 +15,7 @@ module.exports = {
         "2xl": "1400px",
       },
     },
+    // add changes to tailwind config here
     extend: {
       keyframes: {
         "accordion-down": {
@@ -29,6 +30,9 @@ module.exports = {
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+      },
+      screens: {
+        "xs": "400px",
       },
     },
   },
