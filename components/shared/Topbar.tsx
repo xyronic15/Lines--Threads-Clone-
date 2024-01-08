@@ -28,11 +28,11 @@ const Topbar = () => {
       <div className="text-white flex align-middle">
         <DropdownMenu>
           <DropdownMenuTrigger className="rounded-full p-1">
-            <GoGear size={36} />
+            <GoGear className="w-[24px] h-[24px] md:w-[36px] md:h-[36px]" />
           </DropdownMenuTrigger>
-          <DropdownMenuContent className="bg-slate-950 text-white mt-5 mr-12">
+          <DropdownMenuContent className="bg-slate-950 text-white mt-5 mr-8 md:mr-12">
             <Link href="/profile/edit">
-              <DropdownMenuItem className="text-lg">
+              <DropdownMenuItem className="text-lg hover:bg-slate-800">
                 Edit profile
               </DropdownMenuItem>
             </Link>
