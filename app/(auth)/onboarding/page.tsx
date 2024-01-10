@@ -11,7 +11,7 @@ async function Page() {
   const userInfo = await fetchUser(user.id);
 
   // if the user is onboarded then redirect to "/"
-  if (userInfo.onboarded) redirect("/");
+  if (userInfo?.onboarded) redirect("/");
 
   const userData = {
     id: user?.id,
@@ -25,7 +25,7 @@ async function Page() {
   return (
     <main className="mx-auto flex flex-col max-w-5xl py-20">
       <h1>Onboarding</h1>
-      <p>Complete your profile</p>
+      <p className="mt-3 text-white">Complete your profile</p>
 
       {/* section for the account profile form */}
       <section className="mt-9 p-10">

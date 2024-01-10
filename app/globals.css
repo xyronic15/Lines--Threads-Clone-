@@ -39,3 +39,16 @@
     @apply flex flex-row justify-between gap-3 xs:gap-5;
   }
 }
+
+/* Account Profile styling */
+.account-form-image {
+  @apply flex w-24 h-24 items-center justify-center rounded-full bg-slate-800 !important;
+}
+
+.account-form-image-input {
+  @apply cursor-pointer border-none bg-transparent outline-none file:text-sky-700 !important;
+}
+
+.account-form-input {
+  @apply border border-slate-800 bg-black text-white !important;
+}
