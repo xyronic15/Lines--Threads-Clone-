@@ -38,7 +38,7 @@ interface Props {
 
 const AccountProfile = ({ user, btnTitle }: Props) => {
   const [files, setFiles] = useState<File[]>([]);
-  const { startUpload } = useUploadThing("media");
+  const { startUpload } = useUploadThing("media"); // TBC
   const router = useRouter();
   const pathname = usePathname();
 
@@ -80,18 +80,6 @@ const AccountProfile = ({ user, btnTitle }: Props) => {
   // define submit function
   // will convert the profile image into an url and then update user information
   const onSubmit = async (values: z.infer<typeof UserValidation>) => {
-    const blob = values.profile_photo;
-
-    const hasImageChanged = isBase64Image(blob);
-
-    if (hasImageChanged) {
-      const imgRes = await startUpload(files);
-
-      if (imgRes && imgRes[0].fileUrl) {
-        values.profile_photo = imgRes[0].fileUrl;
-      }
-    }
-
     // Update user profile
     await updateUser({
       userId: user.id,
@@ -121,7 +109,7 @@ const AccountProfile = ({ user, btnTitle }: Props) => {
           name="profile_photo"
           render={({ field }) => (
             <FormItem className="flex items-center gap-4">
-              <FormLabel className="flex w-24 h-24 justify-center rounded-full">
+              <FormLabel className="account-form-image">
                 {field.value ? (
                   <Image
                     src={field.value}
@@ -135,12 +123,12 @@ const AccountProfile = ({ user, btnTitle }: Props) => {
                   <CgProfile size={24} className="object-contain" />
                 )}
               </FormLabel>
-              <FormControl className="flex-1">
+              <FormControl className="flex-1 text-white">
                 <Input
                   type="file"
                   accept="image/*"
                   placeholder="Upload a photo"
-                  className="cursor-pointer border-none bg-transparent outline-none file:text-blue"
+                  className="account-form-image-input"
                   onChange={(e) => handleImage(e, field.onChange)}
                 />
               </FormControl>
@@ -154,12 +142,12 @@ const AccountProfile = ({ user, btnTitle }: Props) => {
           name="name"
           render={({ field }) => (
             <FormItem className="flex flex-col w-full">
-              <FormLabel className="font-semibold">Name</FormLabel>
+              <FormLabel className="font-semibold text-white">Name</FormLabel>
               <FormControl className="flex-1 font-semibold">
                 <Input
                   type="text"
                   placeholder="Name"
-                  className="border-black"
+                  className="account-form-input"
                   {...field}
                 />
               </FormControl>
@@ -173,9 +161,11 @@ const AccountProfile = ({ user, btnTitle }: Props) => {
           name="username"
           render={({ field }) => (
             <FormItem className="flex flex-col w-full">
-              <FormLabel className="font-semibold">Username</FormLabel>
+              <FormLabel className="font-semibold text-white">
+                Username
+              </FormLabel>
               <FormControl className="flex-1 font-semibold">
-                <Input type="text" className="border-black" {...field} />
+                <Input type="text" className="account-form-input" {...field} />
               </FormControl>
             </FormItem>
           )}
@@ -187,9 +177,9 @@ const AccountProfile = ({ user, btnTitle }: Props) => {
           name="bio"
           render={({ field }) => (
             <FormItem className="flex flex-col w-full">
-              <FormLabel className="font-semibold">Bio</FormLabel>
+              <FormLabel className="font-semibold text-white">Bio</FormLabel>
               <FormControl className="flex-1 font-semibold">
-                <Textarea rows={10} className="border-black" {...field} />
+                <Textarea rows={10} className="account-form-input" {...field} />
               </FormControl>
             </FormItem>
           )}
