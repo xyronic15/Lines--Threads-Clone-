@@ -2,8 +2,9 @@ import { fetchUser } from "@/lib/actions/user.actions";
 import { currentUser } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
 import Image from "next/image";
+import PostLine from "@/components/forms/PostLine";
 
-const Home = async () => {
+const Page = async () => {
   // get the current user
   const user = await currentUser();
   if (!user) return null;
@@ -12,12 +13,20 @@ const Home = async () => {
   const userInfo = await fetchUser(user.id);
   if (!userInfo?.onboarded) redirect("/onboarding");
 
+  const lineInfo = {
+    id: "",
+    text: "",
+    media: [],
+    circleId: "",
+  }
+
   return (
     <>
-      <Image src={userInfo?.image || ""} width={96} height={96} />
-      <h1>Home</h1>
+      <h1>Create a line</h1>
+
+      <PostLine userId={user.id} line={lineInfo} btnTitle="Post" />
     </>
   );
 };
 
-export default Home;
+export default Page;
