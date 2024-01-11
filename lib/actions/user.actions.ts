@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import User from "../models/user.model";
-import { connectToDB } from "../validations/mongoose";
+import { connectToDB } from "../mongoose";
 
 interface UserParams {
   userId: string;
