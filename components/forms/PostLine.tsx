@@ -28,19 +28,20 @@ import { ChangeEvent, useState } from "react";
 import { IoImageOutline } from "react-icons/io5";
 import { IoMdCloseCircle } from "react-icons/io";
 import { Number } from "mongoose";
+import { createPost } from "@/lib/actions/post.actions";
 
 interface Props {
   userId: string;
+  circleId: string | null;
   line: {
     id: string;
     text: string;
     media: string[];
-    circleId: string;
   };
   btnTitle: string;
 }
 
-const PostLine = ({ userId, line, btnTitle }: Props) => {
+const PostLine = ({ userId, circleId, line, btnTitle }: Props) => {
   // get the router and the current pathname
   const router = useRouter();
   const pathname = usePathname();
@@ -91,7 +92,7 @@ const PostLine = ({ userId, line, btnTitle }: Props) => {
     fieldChange: (value: string[]) => void
   ) => {
     e.preventDefault();
-    
+
     const newMedia = media.filter((_, i) => i !== index);
     setMedia(newMedia);
     fieldChange(newMedia);
@@ -99,9 +100,21 @@ const PostLine = ({ userId, line, btnTitle }: Props) => {
 
   // submit function
   const onSubmit = async (values: z.infer<typeof LineValidation>) => {
-    console.log("submitted");
-    console.log(values);
-    // router.push("/");
+    // console.log(values);
+
+    await createPost({
+      text: values.text,
+      media: values.media,
+      author: userId,
+      circleId: circleId,
+      path: pathname,
+    });
+
+    if (circleId) {
+      router.push(`/circle/${circleId}`);
+    } else {
+      router.push("/");
+    }
   };
 
   return (
@@ -155,7 +168,9 @@ const PostLine = ({ userId, line, btnTitle }: Props) => {
                           />
                           <button
                             className="absolute top-2 right-2"
-                            onClick={(e) => removeMedia(e, index, field.onChange)}
+                            onClick={(e) =>
+                              removeMedia(e, index, field.onChange)
+                            }
                           >
                             <IoMdCloseCircle size={36} className="text-white" />
                           </button>

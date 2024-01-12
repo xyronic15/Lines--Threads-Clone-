@@ -24,7 +24,7 @@ const Page = async () => {
     <>
       <h1>Create a line</h1>
 
-      <PostLine userId={user.id} line={lineInfo} btnTitle="Post" />
+      <PostLine userId={userInfo._id} line={lineInfo} btnTitle="Post" />
     </>
   );
 };

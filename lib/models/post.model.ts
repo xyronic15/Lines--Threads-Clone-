@@ -7,9 +7,8 @@ const postSchema = new mongoose.Schema({
   circle: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Circle",
-    required: true,
   },
-  createdAt: { type: Date, default: Date.now, required: true },
+  createdAt: { type: Date, default: Date.now },
   likes: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
   editedAt: { type: Date, default: null },
   parentId: { type: String },
@@ -19,7 +18,7 @@ const postSchema = new mongoose.Schema({
       ref: "Post",
     },
   ],
-  active: { type: Boolean, required: true },
+  active: { type: Boolean, default: true, required: true },
 });
 
 const Post = mongoose.models.Post || mongoose.model("Post", postSchema);
