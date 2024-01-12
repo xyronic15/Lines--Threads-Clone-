@@ -26,6 +26,8 @@ import { Input } from "@/components/ui/input";
 import Image from "next/image";
 import { ChangeEvent, useState } from "react";
 import { IoImageOutline } from "react-icons/io5";
+import { IoMdCloseCircle } from "react-icons/io";
+import { Number } from "mongoose";
 
 interface Props {
   userId: string;
@@ -57,8 +59,8 @@ const PostLine = ({ userId, line, btnTitle }: Props) => {
     },
   });
 
-  // media handlers
-  const handleMedia = (
+  // add media handler
+  const addMedia = (
     e: ChangeEvent<HTMLInputElement>,
     fieldChange: (value: string[]) => void
   ) => {
@@ -80,6 +82,19 @@ const PostLine = ({ userId, line, btnTitle }: Props) => {
 
       fileReader.readAsDataURL(file);
     }
+  };
+
+  // remove media handler
+  const removeMedia = (
+    e: MouseEvent<HTMLButtonElement>,
+    index: number,
+    fieldChange: (value: string[]) => void
+  ) => {
+    e.preventDefault();
+    
+    const newMedia = media.filter((_, i) => i !== index);
+    setMedia(newMedia);
+    fieldChange(newMedia);
   };
 
   // submit function
@@ -121,12 +136,12 @@ const PostLine = ({ userId, line, btnTitle }: Props) => {
           name="media"
           render={({ field }) => (
             <FormItem className="grid grid-cols-3 gap-2">
-              {field.value?.length > 0 ? (
+              {field.value!.length > 0 ? (
                 <Carousel className="col-span-3">
                   <CarouselContent className="w-full h-96">
-                    {field.value.map((url, index) => {
+                    {field?.value.map((url, index) => {
                       return (
-                        <CarouselItem className="relative w-full h-full">
+                        <CarouselItem className="relative w-full h-full flex items-center justify-center">
                           <Image
                             key={index}
                             src={url}
@@ -136,7 +151,14 @@ const PostLine = ({ userId, line, btnTitle }: Props) => {
                             // height={200}
                             alt="media"
                             priority
+                            className="px-5 md:px-20"
                           />
+                          <button
+                            className="absolute top-2 right-2"
+                            onClick={(e) => removeMedia(e, index, field.onChange)}
+                          >
+                            <IoMdCloseCircle size={36} className="text-white" />
+                          </button>
                         </CarouselItem>
                       );
                     })}
@@ -157,7 +179,7 @@ const PostLine = ({ userId, line, btnTitle }: Props) => {
                   <Input
                     type="file"
                     accept="image/*"
-                    onChange={(e) => handleMedia(e, field.onChange)}
+                    onChange={(e) => addMedia(e, field.onChange)}
                     className="hidden"
                   />
                 </FormControl>
