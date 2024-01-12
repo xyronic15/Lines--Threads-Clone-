@@ -19,7 +19,7 @@ const postSchema = new mongoose.Schema({
       ref: "Post",
     },
   ],
-  onboarded: { type: Boolean, required: true },
+  active: { type: Boolean, required: true },
 });
 
 const Post = mongoose.models.Post || mongoose.model("Post", postSchema);
