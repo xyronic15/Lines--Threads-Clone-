@@ -20,6 +20,8 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
+import MediaCarousel from "@/components/shared/MediaCarousel";
+// import Carousel from "@/components/shared/Carousel";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -73,7 +75,14 @@ const PostLine = ({ userId, circleId, line, btnTitle }: Props) => {
       const file = e.target.files[0];
       setFiles(Array.from(e.target.files));
 
+      // if the file is not an image, return
       if (!file.type.includes("image")) return;
+
+      // if the file exceeds 10mb then return message
+      if (file.size > 10000000) {
+        alert("File size exceeds 10mb");
+        return;
+      }
 
       fileReader.onload = async (event) => {
         const imageDataUrl = event.target?.result?.toString() || "";
@@ -149,7 +158,7 @@ const PostLine = ({ userId, circleId, line, btnTitle }: Props) => {
           name="media"
           render={({ field }) => (
             <FormItem className="grid grid-cols-3 gap-2">
-              {field.value!.length > 0 ? (
+              {/* {field.value!.length > 0 ? (
                 <Carousel className="col-span-3">
                   <CarouselContent className="w-full h-96">
                     {field?.value.map((url, index) => {
@@ -181,10 +190,32 @@ const PostLine = ({ userId, circleId, line, btnTitle }: Props) => {
                   <CarouselPrevious className="ml-16" type="button" />
                   <CarouselNext className="mr-16" type="button" />
                 </Carousel>
-              ) : null}
+              ) : null} */}
+
+              {/* {field.value!.length > 0 && (
+                <div className="col-span-3">
+                  <Carousel
+                    media={field.value}
+                    edit
+                    onClickFunc={removeMedia}
+                    onChange={field.onChange}
+                  />
+                </div>
+              )} */}
+
+              {field.value!.length > 0 && (
+                <div className="col-span-3">
+                  <MediaCarousel
+                    media={field.value}
+                    edit
+                    onClickFunc={removeMedia}
+                    onChange={field.onChange}
+                  />
+                </div>
+              )}
 
               <div className="col-span-2">
-                <FormLabel className="">
+                <FormLabel className={`${field.value!.length >= 4 && "hidden"}`}>
                   <IoImageOutline
                     className="text-white cursor-pointer"
                     size={36}
