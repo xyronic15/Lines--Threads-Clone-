@@ -23,6 +23,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { formatDateString } from "@/lib/utils";
+import DeleteLineButton from "../forms/DeleteLineButton";
 
 interface Props {
   id: string;
@@ -138,13 +139,17 @@ const LineCard = ({
 
             {/* content of the post */}
             {/* linkify the text */}
-            {linkifiedText(text)}
+            {active ? (
+              linkifiedText(text)
+            ) : (
+              <p className="text-gray-500 italic">{text}</p>
+            )}
             {/* <p className="mt-2 text-white whitespace-pre-wrap">{text}</p> */}
           </div>
 
           {/* TBC delete and edit line component */}
           <div className="flex items-start">
-            {currentUserId === author.id && !isComment && (
+            {currentUserId === author.id && !isComment && active && (
               <Dialog>
                 <DropdownMenu>
                   <DropdownMenuTrigger className="text-white outline-none">
@@ -177,12 +182,13 @@ const LineCard = ({
                     </DialogDescription>
                   </DialogHeader>
                   <DialogFooter>
-                    <Button
-                      type="button"
-                      className="border border-red-600 text-red-600 hover:bg-black"
-                    >
-                      Confirm
-                    </Button>
+                    <DeleteLineButton
+                      id={id}
+                      currentUserId={currentUserId}
+                      authorId={author.id}
+                      parentId={parentId}
+                      isComment={isComment}
+                    />
                   </DialogFooter>
                 </DialogContent>
               </Dialog>
@@ -200,24 +206,24 @@ const LineCard = ({
 
       {/* icons for actions: like and comment */}
       <div className={`${isComment && "mb-10"} mt-5 flex flex-col gap-3`}>
-        <div className="flex flex-row justify-between align-middle">
-          {/* TBC like button component instead of icon */}
-          <div className="flex flex-row gap-3 align-middle">
-            <FaRegHeart size={24} />
+        {active && (
+          <div className="flex flex-row justify-between align-middle">
+            {/* TBC like button component instead of icon */}
+            <div className="flex flex-row gap-3 align-middle">
+              <FaRegHeart size={24} />
 
-            <p>{likes.length}</p>
-          </div>
+              <p>{likes.length}</p>
+            </div>
 
-          {/* TBC Edited and posted date */}
-          {active && (
+            {/* TBC Edited and posted date */}
+
             <p className="text-gray-400 text-sm">
               {editedAt
                 ? `Edited on: ${formatDateString(editedAt)}`
                 : `Created on: ${formatDateString(createdAt)}`}
             </p>
-          )}
-        </div>
-
+          </div>
+        )}
         {/* if this card is a comment, show how many comments it has */}
         {isComment && comments.length > 0 && (
           <Link href={`/thread/${id}`}>

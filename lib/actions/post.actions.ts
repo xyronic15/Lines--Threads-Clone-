@@ -132,3 +132,22 @@ export async function editPostById({
     throw new Error(`Failed to edit post: ${e.message}`);
   }
 }
+
+// function deletes post given an id string
+export async function deletePostById(id: string, path: string): Promise<void> {
+  try {
+    connectToDB();
+
+    // update the post so that it has deleted text, no media, and set active as false
+    await Post.findByIdAndUpdate(id, {
+      text: "This post has been deleted",
+      media: [],
+      active: false,
+    });
+
+    // revalidate the path
+    revalidatePath(path);
+  } catch (e: any) {
+    throw new Error(`Failed to delete post: ${e.message}`);
+  }
+}
