@@ -102,21 +102,23 @@ const PostLine = ({ userId, circleId, line, btnTitle }: Props) => {
 
     // if the route is edit-line then use editPostById
     // else use createPost
-    if (pathname.includes("edit-line")) {
+    if (pathname === "/edit-line") {
       await editPostById({
         id: line.id,
         text: values.text,
         media: values.media,
         path: pathname,
       });
+    } else {
+      console.log("running");
+      await createPost({
+        text: values.text,
+        media: values.media,
+        author: userId,
+        circleId: circleId,
+        path: pathname,
+      });
     }
-    await createPost({
-      text: values.text,
-      media: values.media,
-      author: userId,
-      circleId: circleId,
-      path: pathname,
-    });
 
     if (circleId) {
       router.push(`/circle/${circleId}`);
