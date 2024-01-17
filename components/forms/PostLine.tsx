@@ -13,24 +13,13 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "@/components/ui/carousel";
 import MediaCarousel from "@/components/shared/MediaCarousel";
-// import Carousel from "@/components/shared/Carousel";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import Image from "next/image";
 import { ChangeEvent, useState } from "react";
 import { IoImageOutline } from "react-icons/io5";
-import { IoMdCloseCircle } from "react-icons/io";
-import { Number } from "mongoose";
-import { createPost } from "@/lib/actions/post.actions";
+import { createPost, editPostById } from "@/lib/actions/post.actions";
 
 interface Props {
   userId: string;
@@ -50,7 +39,7 @@ const PostLine = ({ userId, circleId, line, btnTitle }: Props) => {
 
   // files array for images
   const [files, setFiles] = useState<File[]>([]);
-  const [media, setMedia] = useState<string[]>([]);
+  const [media, setMedia] = useState<string[]>(line.media);
 
   // form definition
   const form = useForm<z.infer<typeof LineValidation>>({
@@ -111,6 +100,16 @@ const PostLine = ({ userId, circleId, line, btnTitle }: Props) => {
   const onSubmit = async (values: z.infer<typeof LineValidation>) => {
     // console.log(values);
 
+    // if the route is edit-line then use editPostById
+    // else use createPost
+    if (pathname.includes("edit-line")) {
+      await editPostById({
+        id: line.id,
+        text: values.text,
+        media: values.media,
+        path: pathname,
+      });
+    }
     await createPost({
       text: values.text,
       media: values.media,
@@ -121,6 +120,8 @@ const PostLine = ({ userId, circleId, line, btnTitle }: Props) => {
 
     if (circleId) {
       router.push(`/circle/${circleId}`);
+    } else if (pathname.includes("edit-line")) {
+      router.push(`/line/${line.id}`);
     } else {
       router.push("/");
     }
@@ -158,51 +159,6 @@ const PostLine = ({ userId, circleId, line, btnTitle }: Props) => {
           name="media"
           render={({ field }) => (
             <FormItem className="grid grid-cols-3 gap-2">
-              {/* {field.value!.length > 0 ? (
-                <Carousel className="col-span-3">
-                  <CarouselContent className="w-full h-96">
-                    {field?.value.map((url, index) => {
-                      return (
-                        <CarouselItem className="relative w-full h-full flex items-center justify-center">
-                          <Image
-                            key={index}
-                            src={url}
-                            layout="fill"
-                            objectFit="contain"
-                            // width={200}
-                            // height={200}
-                            alt="media"
-                            priority
-                            className="px-5 md:px-20"
-                          />
-                          <button
-                            className="absolute top-2 right-2"
-                            onClick={(e) =>
-                              removeMedia(e, index, field.onChange)
-                            }
-                          >
-                            <IoMdCloseCircle size={36} className="text-white" />
-                          </button>
-                        </CarouselItem>
-                      );
-                    })}
-                  </CarouselContent>
-                  <CarouselPrevious className="ml-16" type="button" />
-                  <CarouselNext className="mr-16" type="button" />
-                </Carousel>
-              ) : null} */}
-
-              {/* {field.value!.length > 0 && (
-                <div className="col-span-3">
-                  <Carousel
-                    media={field.value}
-                    edit
-                    onClickFunc={removeMedia}
-                    onChange={field.onChange}
-                  />
-                </div>
-              )} */}
-
               {field.value!.length > 0 && (
                 <div className="col-span-3">
                   <MediaCarousel
@@ -215,7 +171,9 @@ const PostLine = ({ userId, circleId, line, btnTitle }: Props) => {
               )}
 
               <div className="col-span-2">
-                <FormLabel className={`${field.value!.length >= 4 && "hidden"}`}>
+                <FormLabel
+                  className={`${field.value!.length >= 4 && "hidden"}`}
+                >
                   <IoImageOutline
                     className="text-white cursor-pointer"
                     size={36}

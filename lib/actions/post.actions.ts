@@ -70,6 +70,16 @@ export async function fetchPostById(postId: string) {
         select: "_id name image",
       }) // populate the circleId field with the circle's mongoid, name and PFP
       .populate({
+        path: "likes",
+        populate: [
+          {
+            path: "author",
+            model: User,
+            select: "id",
+          },
+        ],
+      }) // populate the likes field with the user's id from clerk
+      .populate({
         path: "children", //populate the children field
         populate: [
           {
@@ -92,5 +102,33 @@ export async function fetchPostById(postId: string) {
     return post;
   } catch (e: any) {
     throw new Error(`Failed to fetch post: ${e.message}`);
+  }
+}
+
+// function to edit a post
+export async function editPostById({
+  id,
+  text,
+  media,
+  path,
+}: PostParams): Promise<void> {
+  try {
+    connectToDB();
+
+    // find the post in the database and update the post's text and media
+    const post = await Post.findById(id);
+    const updatedPost = await Post.findByIdAndUpdate(id, {
+      text: text,
+      media: media,
+      editedAt: new Date(),
+      createdAt: post.createdAt,
+    });
+
+    console.log(updatedPost);
+
+    // revalidate the path
+    revalidatePath(path);
+  } catch (e: any) {
+    throw new Error(`Failed to edit post: ${e.message}`);
   }
 }
