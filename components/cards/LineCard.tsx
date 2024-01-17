@@ -3,6 +3,26 @@ import Image from "next/image";
 import Link from "next/link";
 import MediaCarousel from "@/components/shared/MediaCarousel";
 import { FaRegHeart, FaRegComment } from "react-icons/fa";
+import { BsThreeDots } from "react-icons/bs";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { formatDateString } from "@/lib/utils";
 
 interface Props {
   id: string;
@@ -48,6 +68,42 @@ const LineCard = ({
   comments,
   isComment,
 }: Props) => {
+  // formatting the text to include any links
+  const linkifiedText = (text: string) => {
+    // function checks if the word is a link
+    const isUrl = (word: string) => {
+      const urlPattern =
+        /^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/gm;
+      return word.match(urlPattern);
+    };
+
+    // function adds the link to the text if it is a link
+    const addMarkup = (word: string) => {
+      // split the text if newline is found
+      if (word.includes("\n")) {
+        const words = word.split("\n");
+        const formattedWords = words.map((w, i) => addMarkup(w));
+        const html = formattedWords.join("<br>");
+        return html;
+      }
+      const linkified = isUrl(word)
+        ? `<a class="underline hover:font-medium" href="${word}">${word}</a>`
+        : word;
+      return linkified;
+    };
+
+    const words = text.split(" ");
+
+    const formattedWords = words.map((w, i) => addMarkup(w));
+    const html = formattedWords.join(" ");
+    return (
+      <p
+        className="mt-2 text-white whitespace-pre-wrap"
+        dangerouslySetInnerHTML={{ __html: html }}
+      />
+    );
+  };
+
   return (
     <article
       className={`flex w-full flex-col rounded-xl gap-2 ${
@@ -81,11 +137,58 @@ const LineCard = ({
             </Link>
 
             {/* content of the post */}
-            <p className="mt-2 text-white">{text}</p>
+            {/* linkify the text */}
+            {linkifiedText(text)}
+            {/* <p className="mt-2 text-white whitespace-pre-wrap">{text}</p> */}
+          </div>
+
+          {/* TBC delete and edit line component */}
+          <div className="flex items-start">
+            {currentUserId === author.id && !isComment && (
+              <Dialog>
+                <DropdownMenu>
+                  <DropdownMenuTrigger className="text-white outline-none">
+                    <BsThreeDots size={24} />
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent className="bg-slate-950 text-white mr-20 translate-y-[-36px] border-0">
+                    <Link
+                      href={{
+                        pathname: "/edit-line",
+                        query: {
+                          id: id,
+                        },
+                      }}
+                    >
+                      <DropdownMenuItem>Edit line</DropdownMenuItem>
+                    </Link>
+                    <DropdownMenuItem className="text-red-600">
+                      <DialogTrigger className="w-full flex items-start">
+                        Delete line
+                      </DialogTrigger>
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+                <DialogContent className="bg-slate-950 text-white">
+                  <DialogHeader>
+                    <DialogTitle>Are you absolutely sure?</DialogTitle>
+                    <DialogDescription>
+                      This action cannot be undone. Are you sure you want to
+                      permanently delete this post?
+                    </DialogDescription>
+                  </DialogHeader>
+                  <DialogFooter>
+                    <Button
+                      type="button"
+                      className="border border-red-600 text-red-600 hover:bg-black"
+                    >
+                      Confirm
+                    </Button>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
+            )}
           </div>
         </div>
-
-        {/* TBC Delete and edit line component */}
       </div>
 
       {/* tbc make preview images if it is a comment */}
@@ -97,13 +200,22 @@ const LineCard = ({
 
       {/* icons for actions: like and comment */}
       <div className={`${isComment && "mb-10"} mt-5 flex flex-col gap-3`}>
-        <div className="flex gap-3">
+        <div className="flex flex-row justify-between align-middle">
           {/* TBC like button component instead of icon */}
-          <FaRegHeart size={24} />
+          <div className="flex flex-row gap-3 align-middle">
+            <FaRegHeart size={24} />
 
-          <p>{likes.length}</p>
+            <p>{likes.length}</p>
+          </div>
 
           {/* TBC Edited and posted date */}
+          {active && (
+            <p className="text-gray-400 text-sm">
+              {editedAt
+                ? `Edited on: ${formatDateString(editedAt)}`
+                : `Created on: ${formatDateString(createdAt)}`}
+            </p>
+          )}
         </div>
 
         {/* if this card is a comment, show how many comments it has */}
