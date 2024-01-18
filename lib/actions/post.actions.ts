@@ -24,7 +24,7 @@ export async function createPost({
   circleId,
   path,
 }: PostParams) {
-  console.log(author);
+  // console.log(author);
 
   // connect to the database
   try {
@@ -71,13 +71,8 @@ export async function fetchPostById(postId: string) {
       }) // populate the circleId field with the circle's mongoid, name and PFP
       .populate({
         path: "likes",
-        populate: [
-          {
-            path: "author",
-            model: User,
-            select: "id",
-          },
-        ],
+        model: User,
+        select: "id -_id",
       }) // populate the likes field with the user's id from clerk
       .populate({
         path: "children", //populate the children field
@@ -98,7 +93,11 @@ export async function fetchPostById(postId: string) {
           },
         ],
       })
+      // .select("-likes")
       .exec();
+
+    post.adjustedLikes = post.likes.map((like: any) => like.id); // convert the likes array to an array of strings
+
     return post;
   } catch (e: any) {
     throw new Error(`Failed to fetch post: ${e.message}`);
@@ -124,7 +123,7 @@ export async function editPostById({
       createdAt: post.createdAt,
     });
 
-    console.log(updatedPost);
+    // console.log(updatedPost);
 
     // revalidate the path
     revalidatePath(path);
@@ -150,4 +149,29 @@ export async function deletePostById(id: string, path: string): Promise<void> {
   } catch (e: any) {
     throw new Error(`Failed to delete post: ${e.message}`);
   }
+}
+
+// function that toggles the like of a post
+export async function toggleLike(
+  postId: string,
+  userId: string,
+  like: boolean
+): Promise<void> {
+  try {
+    connectToDB();
+
+    // find the user in the database
+    const user = await User.findOne({ id: userId });
+
+    // find the post in the database and update the post's likes array with the userId or remove the userId from the likes array
+    const updateOperation = like
+      ? { $addToSet: { likes: user._id } } // Add userId to likes array
+      : { $pull: { likes: user._id } }; // Remove userId from likes array
+
+    await Post.findByIdAndUpdate(postId, updateOperation);
+  } catch (e: any) {
+    throw new Error(`Failed to toggle like: ${e.message}`);
+  }
+}
+{
 }

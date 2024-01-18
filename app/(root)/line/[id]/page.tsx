@@ -17,7 +17,7 @@ const page = async ({ params }: { params: { id: string } }) => {
 
   // get the post by id from mongodb
   const line = await fetchPostById(params.id);
-  // console.log(typeof line._id);
+  console.log(line.adjustedLikes);
 
   return (
     <section className="relative">
@@ -31,7 +31,7 @@ const page = async ({ params }: { params: { id: string } }) => {
           author={line.author}
           circle={line.circle}
           createdAt={line.createdAt}
-          likes={line.likes}
+          adjustedLikes={line.adjustedLikes}
           editedAt={line.editedAt}
           active={line.active}
           comments={line.children}
@@ -54,7 +54,7 @@ const page = async ({ params }: { params: { id: string } }) => {
             author={comment.author}
             circle={comment.circle}
             createdAt={comment.createdAt}
-            likes={comment.likes}
+            adjustedLikes={comment.likes}
             editedAt={comment.editedAt}
             active={comment.active}
             comments={comment.children}

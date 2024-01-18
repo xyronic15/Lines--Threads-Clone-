@@ -23,7 +23,8 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { formatDateString } from "@/lib/utils";
-import DeleteLineButton from "../forms/DeleteLineButton";
+import DeleteLineButton from "@/components/forms/DeleteLineButton";
+import LikeLineButton from "@/components/forms/LikeLineButton";
 
 interface Props {
   id: string;
@@ -42,7 +43,7 @@ interface Props {
     image: string;
   } | null;
   createdAt: string;
-  likes: string[];
+  adjustedLikes: string[];
   editedAt: string | null;
   active: boolean;
   comments: {
@@ -63,7 +64,7 @@ const LineCard = ({
   author,
   circle,
   createdAt,
-  likes,
+  adjustedLikes,
   editedAt,
   active,
   comments,
@@ -208,15 +209,14 @@ const LineCard = ({
       <div className={`${isComment && "mb-10"} mt-5 flex flex-col gap-3`}>
         {active && (
           <div className="flex flex-row justify-between align-middle">
-            {/* TBC like button component instead of icon */}
-            <div className="flex flex-row gap-3 align-middle">
-              <FaRegHeart size={24} />
+            {/* Like button */}
+            <LikeLineButton
+              id={id}
+              likes={adjustedLikes}
+              currentUserId={currentUserId}
+            />
 
-              <p>{likes.length}</p>
-            </div>
-
-            {/* TBC Edited and posted date */}
-
+            {/* Edited and posted date */}
             <p className="text-gray-400 text-sm">
               {editedAt
                 ? `Edited on: ${formatDateString(editedAt)}`
