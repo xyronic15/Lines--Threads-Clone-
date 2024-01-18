@@ -23,6 +23,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { formatDateString } from "@/lib/utils";
+import { formatText } from "@/lib/helper";
 import DeleteLineButton from "@/components/forms/DeleteLineButton";
 import LikeLineButton from "@/components/forms/LikeLineButton";
 
@@ -70,42 +71,6 @@ const LineCard = ({
   comments,
   isComment,
 }: Props) => {
-  // formatting the text to include any links
-  const linkifiedText = (text: string) => {
-    // function checks if the word is a link
-    const isUrl = (word: string) => {
-      const urlPattern =
-        /^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/gm;
-      return word.match(urlPattern);
-    };
-
-    // function adds the link to the text if it is a link
-    const addMarkup = (word: string) => {
-      // split the text if newline is found
-      if (word.includes("\n")) {
-        const words = word.split("\n");
-        const formattedWords = words.map((w, i) => addMarkup(w));
-        const html = formattedWords.join("<br>");
-        return html;
-      }
-      const linkified = isUrl(word)
-        ? `<a class="underline hover:font-medium" href="${word}">${word}</a>`
-        : word;
-      return linkified;
-    };
-
-    const words = text.split(" ");
-
-    const formattedWords = words.map((w, i) => addMarkup(w));
-    const html = formattedWords.join(" ");
-    return (
-      <p
-        className="mt-2 text-white whitespace-pre-wrap"
-        dangerouslySetInnerHTML={{ __html: html }}
-      />
-    );
-  };
-
   return (
     <article
       className={`flex w-full flex-col rounded-xl gap-2 ${
@@ -141,7 +106,12 @@ const LineCard = ({
             {/* content of the post */}
             {/* linkify the text */}
             {active ? (
-              linkifiedText(text)
+              <p
+                className="mt-2 text-white whitespace-pre-wrap"
+                dangerouslySetInnerHTML={{
+                  __html: formatText(text, "underline hover:font-medium"),
+                }}
+              />
             ) : (
               <p className="text-gray-500 italic">{text}</p>
             )}
