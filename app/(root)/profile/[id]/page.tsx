@@ -1,4 +1,7 @@
 import ProfileHeader from "@/components/shared/ProfileHeader";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import LinesTab from "@/components/shared/LinesTab";
+import { profileTabs } from "@/constants";
 import { fetchUser } from "@/lib/actions/user.actions";
 import { currentUser } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
@@ -18,7 +21,7 @@ const Page = async ({ params }: { params: { id: string } }) => {
   const userInfo =
     currUserInfo?.id === user.id ? currUserInfo : await fetchUser(params.id);
 
-  console.log(userInfo);
+  // console.log(userInfo);
   return (
     <section>
       <ProfileHeader
@@ -30,6 +33,32 @@ const Page = async ({ params }: { params: { id: string } }) => {
         bio={userInfo.bio}
         postCounts={userInfo.posts.length}
       />
+
+      <div className="mt-9">
+        <Tabs defaultValue="lines" className="w-full">
+          <TabsList className="flex w-full justify-center">
+            {profileTabs.map((tab) => (
+              <TabsTrigger key={tab.value} value={tab.value}>
+                {tab.icon}
+
+                <p className="max-sm:hidden">{tab.label}</p>
+
+                {tab.label === "Lines" && (
+                  <p className="ml-1 rounded-sm bg-light-4 px-2 py-1 !text-tiny-medium text-light-2">
+                    {userInfo.posts.length}
+                  </p>
+                )}
+              </TabsTrigger>
+            ))}
+          </TabsList>
+          {profileTabs.map((tab) => (
+            <TabsContent key={`${tab.value}-content`} value={tab.value}>
+              {/* TBC LinesTab for user posts and replies */}
+              <LinesTab currentUserId={user.id} accountId={userInfo.id} />
+            </TabsContent>
+          ))}
+        </Tabs>
+      </div>
     </section>
   );
 };

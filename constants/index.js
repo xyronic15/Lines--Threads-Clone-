@@ -2,8 +2,9 @@ import { GoHome } from 'react-icons/go'
 import { HiMagnifyingGlass } from "react-icons/hi2";
 import { FaRegHeart } from "react-icons/fa";
 import { BiSolidMessageSquareAdd } from "react-icons/bi";
-import { PiCirclesThreeBold } from "react-icons/pi";
+import { PiCirclesThreeBold, PiSignature } from "react-icons/pi";
 import { FaRegUserCircle } from "react-icons/fa";
+
 
 // navlinks for the left sidebar and bottom bar
 export const navLinks = [
@@ -36,5 +37,19 @@ export const navLinks = [
         label: "Profile",
         path: "/profile",
         icon: <FaRegUserCircle size={24} />,
+    }
+]
+
+// tabs for the profile page
+export const profileTabs = [
+    {
+        value: "lines",
+        label: "Lines",
+        icon: <PiSignature size={24} />,
+    },
+    {
+        value: "replies",
+        label: "Replies",
+        icon: <BiSolidMessageSquareAdd size={24} />,
     }
 ]

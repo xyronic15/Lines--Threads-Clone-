@@ -4,7 +4,7 @@ import { formatText } from "@/lib/helper";
 import Image from "next/image";
 
 interface Props {
-  // User and community values
+  // User and circle values
   accountId: string;
   currentUserId: string;
   name: string;

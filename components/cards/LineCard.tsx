@@ -196,7 +196,7 @@ const LineCard = ({
         )}
         {/* if this card is a comment, show how many comments it has */}
         {isComment && comments.length > 0 && (
-          <Link href={`/thread/${id}`}>
+          <Link href={`/line/${id}`}>
             <p className="mt-1 font-medium text-white">
               {comments.length} repl{comments.length > 1 ? "ies" : "y"}
             </p>
@@ -218,7 +218,7 @@ const LineCard = ({
             />
           ))}
 
-          <Link href={`/thread/${id}`}>
+          <Link href={`/line/${id}`}>
             <p className="mt-1 font-medium text-white">
               {comments.length} repl{comments.length > 1 ? "ies" : "y"}
             </p>
