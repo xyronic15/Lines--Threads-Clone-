@@ -50,8 +50,13 @@ const MediaCarousel = ({ media, edit, onClickFunc, onChange }: Props) => {
           );
         })}
       </CarouselContent>
-      <CarouselPrevious className="ml-16" type="button" />
-      <CarouselNext className="mr-16" type="button" />
+      {/* next and prev buttons only appear when the media length is greater than 1 */}
+      {media.length > 1 && !edit && (
+        <>
+          <CarouselPrevious className="ml-16" type="button" />
+          <CarouselNext className="mr-16" type="button" />
+        </>
+      )}
     </Carousel>
   );
 };
