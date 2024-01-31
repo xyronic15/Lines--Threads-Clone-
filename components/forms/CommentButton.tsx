@@ -6,12 +6,7 @@ import Link from "next/link";
 
 interface Props {
   id: string;
-  comments: {
-    author: {
-      name: string;
-      image: string;
-    };
-  }[];
+  comments: string[];
 }
 
 const CommentButton = ({ id, comments }: Props) => {
@@ -33,6 +28,8 @@ const CommentButton = ({ id, comments }: Props) => {
       <p className="text-white">{comments.length}</p>
     </div>
   );
+  // console.log(comments.length);
+  // return <></>;
 };
 
 export default CommentButton;

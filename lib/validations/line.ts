@@ -10,4 +10,5 @@ export const LineValidation = z.object({
 // form validation for comment
 export const CommentValidation = z.object({
   comment: z.string().min(1, { message: "Please write something" }),
+  media: z.string().url().array().optional(),
 });

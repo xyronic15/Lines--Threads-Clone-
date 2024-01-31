@@ -1,4 +1,5 @@
 import LineCard from "@/components/cards/LineCard";
+import CommentLine from "@/components/forms/CommentLine";
 import { fetchPostById } from "@/lib/actions/post.actions";
 import { fetchUser } from "@/lib/actions/user.actions";
 import { currentUser } from "@clerk/nextjs";
@@ -17,7 +18,7 @@ const page = async ({ params }: { params: { id: string } }) => {
 
   // get the post by id from mongodb
   const line = await fetchPostById(params.id);
-  console.log(line.adjustedLikes);
+  // console.log(line.adjustedLikes);
 
   return (
     <section className="relative">
@@ -36,13 +37,21 @@ const page = async ({ params }: { params: { id: string } }) => {
           active={line.active}
           comments={line.children}
         />
+        {/* <p className="text-white">The problem is the line</p>
+        <p className="text-white">{typeof line._id}</p> */}
       </div>
 
       {/* TBC Comment form */}
-      {/* <div></div> */}
+      <div className="mt-7">
+        <CommentLine
+          currentUserId={userInfo._id}
+          currentUserImg={userInfo.image}
+          postId={line._id}
+        />
+      </div>
 
       {/* comments */}
-      {/* <div className="mt-10">
+      <div className="flex flex-col divide-y divide-solid divide-slate-800">
         {line.children.map((comment: any) => (
           <LineCard
             key={comment._id}
@@ -61,7 +70,7 @@ const page = async ({ params }: { params: { id: string } }) => {
             isComment
           />
         ))}
-      </div>  */}
+      </div>
     </section>
   );
 };

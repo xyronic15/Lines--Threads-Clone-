@@ -173,5 +173,39 @@ export async function toggleLike(
     throw new Error(`Failed to toggle like: ${e.message}`);
   }
 }
-{
+
+//function that adds a comment to a post
+export async function addComment(
+  userId: string,
+  postId: string,
+  text: string,
+  media: string[],
+  path: string
+) {
+  try {
+    connectToDB();
+
+    // create a new post
+    const createdPost = await Post.create({
+      text: text,
+      media: media,
+      author: userId,
+      parentId: postId,
+    });
+
+    // update the user's posts
+    await User.findByIdAndUpdate(userId, {
+      $push: { posts: createdPost._id },
+    });
+
+    // find the post in the database and update the post's comments array with the userId and text
+    await Post.findByIdAndUpdate(postId, {
+      $push: { children: createdPost._id },
+    });
+
+    // revalidate the path
+    revalidatePath(path);
+  } catch (e: any) {
+    throw new Error(`Failed to add comment: ${e.message}`);
+  }
 }

@@ -72,10 +72,11 @@ const LineCard = ({
   comments,
   isComment,
 }: Props) => {
+  // console.log(comments);
   return (
     <article
       className={`flex w-full flex-col gap-2 ${
-        isComment ? "px-0 xs:px-7" : "p-7"
+        isComment ? "px-0 xs:px-7 pt-10" : "p-7"
       }`}
     >
       {/* main portion of the card */}
@@ -189,7 +190,10 @@ const LineCard = ({
               />
 
               {/* Comment button */}
-              <CommentButton id={id} comments={comments} />
+              <CommentButton
+                id={id}
+                comments={comments.map((comment: any) => comment.author.id)}
+              />
             </div>
 
             {/* Edited and posted date */}
