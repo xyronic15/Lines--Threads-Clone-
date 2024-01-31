@@ -24,7 +24,7 @@ const LinesTab = async ({
   let result = await fetchUserPosts(accountId);
 
   return (
-    <section className="mt-9 flex flex-col gap-10">
+    <section className="mt-9 flex flex-col divide-y divide-solid divide-slate-800">
       {result.posts.map((line) => {
         // check if the post is active or not
         if (!line.active) {
