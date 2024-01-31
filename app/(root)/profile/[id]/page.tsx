@@ -19,7 +19,7 @@ const Page = async ({ params }: { params: { id: string } }) => {
   // if the current user's id is the same then just use their info
   // else retrieve the user info using the given id
   const userInfo =
-    currUserInfo?.id === user.id ? currUserInfo : await fetchUser(params.id);
+    currUserInfo?.id === params.id ? currUserInfo : await fetchUser(params.id);
 
   // console.log(userInfo);
   return (
