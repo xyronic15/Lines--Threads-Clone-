@@ -26,6 +26,7 @@ import { formatDateString } from "@/lib/utils";
 import { formatText } from "@/lib/helper";
 import DeleteLineButton from "@/components/forms/DeleteLineButton";
 import LikeLineButton from "@/components/forms/LikeLineButton";
+import CommentButton from "@/components/forms/CommentButton";
 
 interface Props {
   id: string;
@@ -73,8 +74,8 @@ const LineCard = ({
 }: Props) => {
   return (
     <article
-      className={`flex w-full flex-col rounded-xl gap-2 ${
-        isComment ? "px-0 xs:px-7" : "bg-slate-800 p-7"
+      className={`flex w-full flex-col gap-2 ${
+        isComment ? "px-0 xs:px-7" : "p-7"
       }`}
     >
       {/* main portion of the card */}
@@ -179,12 +180,17 @@ const LineCard = ({
       <div className={`${isComment && "mb-10"} mt-5 flex flex-col gap-3`}>
         {active && (
           <div className="flex flex-row justify-between align-middle">
-            {/* Like button */}
-            <LikeLineButton
-              id={id}
-              likes={adjustedLikes}
-              currentUserId={currentUserId}
-            />
+            <div className="flex flex-row gap-4">
+              {/* Like button */}
+              <LikeLineButton
+                id={id}
+                likes={adjustedLikes}
+                currentUserId={currentUserId}
+              />
+
+              {/* Comment button */}
+              <CommentButton id={id} comments={comments} />
+            </div>
 
             {/* Edited and posted date */}
             <p className="text-gray-400 text-sm">
@@ -194,37 +200,7 @@ const LineCard = ({
             </p>
           </div>
         )}
-        {/* if this card is a comment, show how many comments it has */}
-        {isComment && comments.length > 0 && (
-          <Link href={`/line/${id}`}>
-            <p className="mt-1 font-medium text-white">
-              {comments.length} repl{comments.length > 1 ? "ies" : "y"}
-            </p>
-          </Link>
-        )}
       </div>
-
-      {/* if this is not a comment and it has comments */}
-      {!isComment && comments.length > 0 && (
-        <div className="ml-1 mt-3 flex items-center gap-2">
-          {comments.slice(0, 2).map((comment, index) => (
-            <Image
-              key={index}
-              src={comment.author.image}
-              alt={`user_${index}`}
-              width={24}
-              height={24}
-              className={`${index !== 0 && "-ml-5"} rounded-full object-cover`}
-            />
-          ))}
-
-          <Link href={`/line/${id}`}>
-            <p className="mt-1 font-medium text-white">
-              {comments.length} repl{comments.length > 1 ? "ies" : "y"}
-            </p>
-          </Link>
-        </div>
-      )}
 
       {!isComment && circle && (
         <Link
