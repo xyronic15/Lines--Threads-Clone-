@@ -36,9 +36,9 @@ const Page = async ({ params }: { params: { id: string } }) => {
 
       <div className="mt-9">
         <Tabs defaultValue="lines" className="w-full">
-          <TabsList className="flex w-full justify-center">
+          <TabsList className="tab">
             {profileTabs.map((tab) => (
-              <TabsTrigger key={tab.value} value={tab.value}>
+              <TabsTrigger key={tab.value} value={tab.value} className="tab">
                 {tab.icon}
 
                 <p className="max-sm:hidden">{tab.label}</p>
