@@ -192,7 +192,7 @@ const LineCard = ({
               {/* Comment button */}
               <CommentButton
                 id={id}
-                comments={comments.map((comment: any) => comment.author.id)}
+                comments={comments.map((comment: any) => comment.author?.id)}
               />
             </div>
 

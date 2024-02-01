@@ -95,3 +95,35 @@ export async function fetchUserPosts(userId: string) {
     throw new Error(`Failed to fetch user posts: $(e.message)`);
   }
 }
+
+// function to get all of the replies to all of a user's posts
+export async function getReplies(userId: string) {
+  try {
+    connectToDB();
+
+    // get the user's object id
+    const id = await User.findOne({ id: userId }).select("_id");
+
+    // get all the posts made by the user
+    const posts = await Post.find({ author: id._id.toString() });
+
+    // get all the children ids to the posts
+    const children = posts.reduce((acc: any, post: any) => {
+      return acc.concat(post.children);
+    }, []);
+
+    // find the children posts excluding the ones made by the given user
+    const replies = await Post.find({
+      _id: { $in: children },
+      author: { $ne: id._id.toString() },
+    }).populate({
+      path: "author",
+      model: User,
+      select: "_id id name image", // populate the author field with the user's clerkid, name and PFP
+    });
+
+    return replies;
+  } catch (e: any) {
+    throw new Error(`Failed to get replies: ${e.message}`);
+  }
+}

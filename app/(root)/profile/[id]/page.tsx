@@ -54,7 +54,11 @@ const Page = async ({ params }: { params: { id: string } }) => {
           {profileTabs.map((tab) => (
             <TabsContent key={`${tab.value}-content`} value={tab.value}>
               {/* TBC LinesTab for user posts and replies */}
-              <LinesTab currentUserId={user.id} accountId={userInfo.id} />
+              <LinesTab
+                currentUserId={user.id}
+                accountId={userInfo.id}
+                areReplies={tab.value === "replies"}
+              />
             </TabsContent>
           ))}
         </Tabs>
