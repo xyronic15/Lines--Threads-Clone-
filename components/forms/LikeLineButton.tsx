@@ -25,7 +25,7 @@ const LikeLineButton = ({ id, likes, currentUserId }: Props) => {
           size={24}
           className="text-pink-600 hover:scale-125 duration-300"
           onClick={async () => {
-            toggleLike(id, currentUserId, !isLiked);
+            await toggleLike(id, currentUserId, !isLiked);
             setIsLiked(!isLiked);
             setLikes(buttonLikes.filter((like) => like !== currentUserId));
           }}
@@ -35,7 +35,7 @@ const LikeLineButton = ({ id, likes, currentUserId }: Props) => {
           size={24}
           className="text-white hover:scale-125 duration-300"
           onClick={async () => {
-            toggleLike(id, currentUserId, !isLiked);
+            await toggleLike(id, currentUserId, !isLiked);
             setIsLiked(!isLiked);
             setLikes([...buttonLikes, currentUserId]);
           }}
