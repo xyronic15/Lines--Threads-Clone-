@@ -1,8 +1,8 @@
 import mongoose from "mongoose";
 
 const followSchema = new mongoose.Schema({
-    following: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
-    follower: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+    following: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }, //the person who is being followed
+    follower: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }, // the user that is following the above
     date: { type: Date, default: Date.now },
 });
 

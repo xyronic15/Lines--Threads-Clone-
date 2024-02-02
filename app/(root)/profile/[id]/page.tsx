@@ -3,6 +3,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import LinesTab from "@/components/shared/LinesTab";
 import { profileTabs } from "@/constants";
 import { fetchUser } from "@/lib/actions/user.actions";
+import { getFollowers, getFollowing } from "@/lib/actions/follow.actions";
 import { currentUser } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
 
@@ -21,6 +22,15 @@ const Page = async ({ params }: { params: { id: string } }) => {
   const userInfo =
     currUserInfo?.id === params.id ? currUserInfo : await fetchUser(params.id);
 
+  // get the followers and the following of the user
+  const followers = await getFollowers(userInfo.id);
+  const following = await getFollowing(userInfo.id);
+
+  // check if the current user is following the given user
+  const isFollowingMember = followers.some(
+    (follower) => follower.id === currUserInfo.id
+  );
+
   // console.log(userInfo);
   return (
     <section>
@@ -32,6 +42,9 @@ const Page = async ({ params }: { params: { id: string } }) => {
         image={userInfo.image}
         bio={userInfo.bio}
         postCounts={userInfo.posts.length}
+        followers={followers.length}
+        following={following.length}
+        isFollowingMember={isFollowingMember}
       />
 
       <div className="mt-9">
