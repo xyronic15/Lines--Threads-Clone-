@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import User from "../models/user.model";
 import Post from "../models/post.model";
+import Follow from "../models/follow.model";
 import { connectToDB } from "../mongoose";
 import Circle from "../models/circle.model";
 import { Children } from "react";
@@ -125,5 +126,55 @@ export async function getReplies(userId: string) {
     return replies;
   } catch (e: any) {
     throw new Error(`Failed to get replies: ${e.message}`);
+  }
+}
+
+// function to get the activity of the user (all of the replies and the follows made to the user's account)
+export async function getActivity(userId: string) {
+  try {
+    connectToDB();
+
+    // get the user's object id
+    const id = await User.findOne({ id: userId }).select("_id");
+
+    // get all the posts made by the user
+    const posts = await Post.find({ author: id._id.toString() });
+
+    // get all the children ids to the posts
+    const children = posts.reduce((acc: any, post: any) => {
+      return acc.concat(post.children);
+    }, []);
+
+    // find the children posts excluding the ones made by the given user
+    const replies = await Post.find({
+      _id: { $in: children },
+      author: { $ne: id._id.toString() },
+    }).populate({
+      path: "author",
+      model: User,
+      select: "_id id name image", // populate the author field with the user's clerkid, name and PFP
+    });
+
+    // rename the "createdAt" property to just "date" and a new field called "type" and set it to comment
+    replies.forEach((reply: any) => {
+      reply.date = reply.createdAt;
+      reply.type = "comment";
+      delete reply.createdAt;
+    });
+
+    console.log(replies.slice(0, 5));
+
+    // get all the follows made to the user sorted by the most recent
+    const follows = await Follow.find({
+      following: id._id.toString(),
+    }).populate({
+      path: "follower",
+      model: User,
+      select: "_id id name image", // populate the author field with the user's clerkid, name and PFP
+    });
+
+    console.log(follows);
+  } catch (e: any) {
+    throw new Error(`Failed to get activity: ${e.message}`);
   }
 }
