@@ -28,7 +28,7 @@ const Page = async ({ params }: { params: { id: string } }) => {
 
   // check if the current user is following the given user
   const isFollowingMember = followers.some(
-    (follower) => follower.id === currUserInfo.id
+    (follower) => follower.follower.id === currUserInfo.id
   );
 
   // console.log(userInfo);
