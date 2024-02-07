@@ -180,7 +180,7 @@ const LineCard = ({
       {/* icons for actions: like and comment */}
       <div className={`${isComment && "mb-10"} mt-5 flex flex-col gap-3`}>
         {active && (
-          <div className="flex flex-row justify-between align-middle">
+          <div className="flex flex-col sm:flex-row gap-2 justify-between align-middle">
             <div className="flex flex-row gap-4">
               {/* Like button */}
               <LikeLineButton
@@ -199,8 +199,8 @@ const LineCard = ({
             {/* Edited and posted date */}
             <p className="text-gray-400 text-sm">
               {editedAt
-                ? `Edited on: ${formatDateString(editedAt)}`
-                : `Created on: ${formatDateString(createdAt)}`}
+                ? `Last edited ${formatDateString(editedAt)}`
+                : `${formatDateString(createdAt)}`}
             </p>
           </div>
         )}

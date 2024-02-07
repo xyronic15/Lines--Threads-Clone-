@@ -20,7 +20,7 @@ interface Props {
 const MediaCarousel = ({ media, edit, onClickFunc, onChange }: Props) => {
   return (
     <Carousel>
-      <CarouselContent className="w-full h-96">
+      <CarouselContent className="w-full h-48 sm:h-96">
         {media.map((url, index) => {
           return (
             <CarouselItem
