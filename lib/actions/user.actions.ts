@@ -146,7 +146,7 @@ export async function getActivity(userId: string) {
     }, []);
 
     // find the children posts excluding the ones made by the given user
-    const replies = await Post.find({
+    const repliesQuery = await Post.find({
       _id: { $in: children },
       author: { $ne: id._id.toString() },
     }).populate({
@@ -156,24 +156,40 @@ export async function getActivity(userId: string) {
     });
 
     // rename the "createdAt" property to just "date" and a new field called "type" and set it to comment
-    replies.forEach((reply: any) => {
-      reply.date = reply.createdAt;
-      reply.type = "comment";
-      delete reply.createdAt;
+    const replies = repliesQuery.map((reply: any) => {
+      return { date: reply.createdAt, type: "comment", reply };
     });
 
-    console.log(replies.slice(0, 5));
+    // replies.slice(0, 5).forEach((reply: any) => {
+    //   console.log(reply);
+    // });
 
     // get all the follows made to the user sorted by the most recent
-    const follows = await Follow.find({
+    const followsQuery = await Follow.find({
       following: id._id.toString(),
     }).populate({
       path: "follower",
       model: User,
-      select: "_id id name image", // populate the author field with the user's clerkid, name and PFP
+      select: "_id id name username bio image", // populate the author field with the user's clerkid, name and PFP
     });
 
-    console.log(follows);
+    // add a field "type" and set it to follow
+    const follows = followsQuery.map((follow: any) => {
+      return { date: follow.date, type: "follow", follow };
+    });
+
+    // follows.slice(0, 5).forEach((follow: any) => {
+    //   console.log(follow);
+    // });
+
+    // combine the arrays and sort them by date property descending
+    const activity = [...replies, ...follows].sort((a: any, b: any) => {
+      return b.date - a.date;
+    });
+
+    // console.log(activity);
+
+    return activity;
   } catch (e: any) {
     throw new Error(`Failed to get activity: ${e.message}`);
   }
