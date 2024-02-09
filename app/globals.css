@@ -15,7 +15,7 @@
 @layer components {
   /* main container */
   .main-container {
-    @apply flex flex-1 flex-col min-h-screen max-sm:items-center bg-slate-950 px-6 pb-10 pt-28 max-md:pb-32 sm:px-10;
+    @apply flex flex-1 flex-col min-h-screen max-sm:items-center bg-slate-950 px-2 pb-10 pt-28 max-md:pb-32 sm:px-10;
   }
 
   /* topbar */

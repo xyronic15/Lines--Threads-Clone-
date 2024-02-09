@@ -3,6 +3,16 @@
 import { formatText } from "@/lib/helper";
 import Image from "next/image";
 import FollowButton from "../forms/FollowButton";
+import { BsThreeDots } from "react-icons/bs";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import Link from "next/link";
 
 interface Props {
   // User and circle values
@@ -51,7 +61,7 @@ const ProfileHeader = ({
           />
         </div>
 
-        <div className="flex flex-col gap-1">
+        <div className="flex flex-col flex-1 grow gap-1">
           <div className="flex flex-row gap-5 items-center">
             {/* name */}
             <h2 className="text-white">{name}</h2>
@@ -90,6 +100,27 @@ const ProfileHeader = ({
             </div>
           ) : (
             <></>
+          )}
+        </div>
+        {/* edit profile button */}
+        <div className="flex items-start">
+          {accountId === currentUserId && (
+            <DropdownMenu>
+              <DropdownMenuTrigger className="text-white outline-none">
+                <BsThreeDots size={24} />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="bg-slate-950 text-white mr-20 translate-y-[-36px] border-0">
+                {!isCircle ? (
+                  <Link href="/profile/edit">
+                    <DropdownMenuItem className="text-lg hover:bg-slate-800">
+                      Edit profile
+                    </DropdownMenuItem>
+                  </Link>
+                ) : (
+                  <></>
+                )}
+              </DropdownMenuContent>
+            </DropdownMenu>
           )}
         </div>
       </div>
