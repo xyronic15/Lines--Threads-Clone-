@@ -36,6 +36,11 @@ const Topbar = () => {
                 Edit profile
               </DropdownMenuItem>
             </Link>
+            <Link href="/create-circle">
+              <DropdownMenuItem className="text-lg hover:bg-slate-800">
+                Create a Circle
+              </DropdownMenuItem>
+            </Link>
             <DropdownMenuSeparator />
             <DropdownMenuItem>
               <SignedIn>
