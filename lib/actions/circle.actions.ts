@@ -33,12 +33,17 @@ export async function createCircle({
     const user = await User.findOne({ id: userId }).select("_id");
 
     // create a new circle using the given information
-    await Circle.create({
+    const circle = await Circle.create({
       name: name,
       username: username,
       image: image,
       bio: bio,
       owner: user._id,
+    });
+
+    // update the user's circles
+    await User.findByIdAndUpdate(user._id, {
+      $push: { circles: circle._id },
     });
   } catch (e: any) {
     throw new Error(`Failed to create a circle: $(e.message)`);
@@ -68,5 +73,46 @@ export async function updateCircle({
     revalidatePath(path);
   } catch (e: any) {
     throw new Error(`Failed to update the circle's information: $(e.message)`);
+  }
+}
+
+// TBC function to fetch a circle's details given a circleId
+export async function fetchCircle(circleId: string) {
+  try {
+    connectToDB();
+
+    // find the circle in the database
+    const circleQuery = await Circle.findById(circleId)
+      .populate({
+        path: "owner",
+        model: User,
+        select: "_id id name image",
+      })
+      .populate({
+        path: "admins",
+        model: User,
+        select: "_id id name image",
+      })
+      .populate({
+        path: "members",
+        model: User,
+        select: "_id id name image",
+      })
+      .select("-posts")
+      .exec();
+
+    const circle = {
+      _id: circleQuery._id,
+      name: circleQuery.name,
+      username: circleQuery.username,
+      image: circleQuery.image,
+      bio: circleQuery.bio,
+    };
+
+    // console.log(circleQuery);
+
+    return [circle, circleQuery.owner, circleQuery.admins, circleQuery.members];
+  } catch (e: any) {
+    throw new Error(`Failed to fetch the circle: $(e.message)`);
   }
 }
