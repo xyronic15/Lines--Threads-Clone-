@@ -41,6 +41,11 @@ export async function createCircle({
       owner: user._id,
     });
 
+    // add the user to the circle's admins
+    await Circle.findByIdAndUpdate(circle._id, {
+      $push: { admins: user._id },
+    });
+
     // update the user's circles
     await User.findByIdAndUpdate(user._id, {
       $push: { circles: circle._id },
@@ -64,8 +69,8 @@ export async function updateCircle({
     connectToDB();
 
     // find the circle and update it's details
-    await Circle.findOneAndUpdate(
-      { id: circleId },
+    await Circle.findByIdAndUpdate(
+      circleId,
       { username: username, name: name, bio: bio, image: image },
       { upsert: true }
     );
@@ -109,10 +114,68 @@ export async function fetchCircle(circleId: string) {
       bio: circleQuery.bio,
     };
 
-    // console.log(circleQuery);
-
     return [circle, circleQuery.owner, circleQuery.admins, circleQuery.members];
   } catch (e: any) {
     throw new Error(`Failed to fetch the circle: $(e.message)`);
+  }
+}
+
+// function to join a circle
+export async function joinCircle(
+  userId: string,
+  circleId: string,
+  path: string
+) {
+  try {
+    connectToDB();
+
+    // find the user and circle in the database
+    const user = await User.findOne({ id: userId }).select("_id");
+    const circle = await Circle.findById(circleId).select("_id");
+
+    // update the circle's members and admins
+    await Circle.findByIdAndUpdate(circle._id, {
+      $push: { members: user._id },
+    });
+    await User.findByIdAndUpdate(user._id, {
+      $push: { circles: circle._id },
+    });
+
+    revalidatePath(path);
+  } catch (e: any) {
+    throw new Error(`Failed to join the circle: $(e.message)`);
+  }
+}
+
+// function that allows the user to leave a circle even if they are a member or an admin
+export async function leaveCircle(
+  userId: string,
+  circleId: string,
+  path: string
+) {
+  try {
+    connectToDB();
+
+    // find the user and circle in the database
+    const user = await User.findOne({ id: userId }).select("_id");
+    const circle = await Circle.findById(circleId).select("_id");
+
+    // only do if the user is not the owner
+    if (user._id === circle.owner) {
+      throw new Error("Cannot leave a circle you own");
+    }
+    // update the circle's members and admins
+    await Circle.findByIdAndUpdate(circle._id, {
+      $pull: { members: user._id, admins: user._id },
+    });
+
+    // remove the circle from the user's circles array
+    await User.findByIdAndUpdate(user._id, {
+      $pull: { circles: circle._id },
+    });
+
+    revalidatePath(path);
+  } catch (e: any) {
+    throw new Error(`Failed to leave the circle: $(e.message)`);
   }
 }

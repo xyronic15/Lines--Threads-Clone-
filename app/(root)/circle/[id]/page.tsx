@@ -15,13 +15,29 @@ const Page = async ({ params }: { params: { id: string } }) => {
   const currUserInfo = await fetchUser(user.id);
   if (!currUserInfo?.onboarded) redirect("/onboarding");
 
-  //   TBC fetch the circle using the given id
+  // fetch the circle using the given id
   const [circle, owner, admins, members] = await fetchCircle(params.id);
-  console.log(admins);
+
+  // check if the current user is a member or admin of this circle
+  const isFollowingMember =
+    admins.some((admin: any) => admin.id === currUserInfo.id) ||
+    members.some((member: any) => member.id === currUserInfo.id);
 
   return (
     <section>
-      <h1>This is a circle</h1>
+      <ProfileHeader
+        accountId={circle._id}
+        currentUserId={currUserInfo.id}
+        name={circle.name}
+        username={circle.username}
+        image={circle.image}
+        bio={circle.bio}
+        isFollowingMember={isFollowingMember}
+        isCircle
+        ownerId={owner.id}
+        admins={admins.map((admin) => admin.id)}
+        members={members.length}
+      />
     </section>
   );
 };

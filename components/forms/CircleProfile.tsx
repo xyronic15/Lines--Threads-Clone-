@@ -100,7 +100,7 @@ export const CircleProfile = ({ userId, circle, btnTitle }: Props) => {
     if (pathname === "/profile/edit-circle") {
       router.back();
     } else {
-      router.push("/");
+      router.push(`/circle/${circle.id}`);
     }
   };
 
@@ -192,7 +192,7 @@ export const CircleProfile = ({ userId, circle, btnTitle }: Props) => {
           )}
         />
 
-        <Button type="submit">Submit</Button>
+        <Button type="submit">{btnTitle}</Button>
       </form>
     </Form>
   );

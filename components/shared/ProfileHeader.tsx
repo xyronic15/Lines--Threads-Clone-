@@ -8,11 +8,10 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import Link from "next/link";
+import JoinCircleButton from "../forms/JoinCircleButton";
 
 interface Props {
   // User and circle values
@@ -47,6 +46,7 @@ const ProfileHeader = ({
   isCircle,
   ownerId,
   admins,
+  members,
 }: Props) => {
   return (
     <div className="flex w-full flex-col justify-start">
@@ -65,7 +65,7 @@ const ProfileHeader = ({
           <div className="flex flex-row gap-5 items-center">
             {/* name */}
             <h2 className="text-white">{name}</h2>
-            {/* TBC follow button */}
+            {/* follow button */}
             {/* TBC join circle button */}
             {!isCircle
               ? currentUserId !== accountId && (
@@ -75,14 +75,20 @@ const ProfileHeader = ({
                     isFollowed={isFollowingMember}
                   />
                 )
-              : null}
+              : ownerId !== currentUserId && (
+                  <JoinCircleButton
+                    circleId={accountId}
+                    currentUserId={currentUserId}
+                    isMember={isFollowingMember}
+                  />
+                )}
           </div>
 
           {/* username */}
           <p className="text-gray-500">@{username}</p>
 
           {/* TBC post count, followers, following if not a circle*/}
-          {/* TBC else members count*/}
+          {/* else members count*/}
           {!isCircle ? (
             <div className="flex flex-row gap-4">
               <div className="text-white flex flex-col justify-start">
@@ -99,12 +105,22 @@ const ProfileHeader = ({
               </div>
             </div>
           ) : (
-            <></>
+            <div className="flex flex-row gap-4">
+              <div className="text-white flex flex-col justify-start">
+                <p className="text-sm font-bold">Admins</p>
+                <p className="text-sm">{admins.length}</p>
+              </div>
+              <div className="text-white flex flex-col justify-start">
+                <p className="text-sm font-bold">Members</p>
+                <p className="text-sm">{members}</p>
+              </div>
+            </div>
           )}
         </div>
-        {/* edit profile button */}
+        {/* TBC edit profile/circle button */}
         <div className="flex items-start">
-          {accountId === currentUserId && (
+          {(accountId === currentUserId ||
+            admins.some((id) => currentUserId === id)) && (
             <DropdownMenu>
               <DropdownMenuTrigger className="text-white outline-none">
                 <BsThreeDots size={24} />
@@ -117,7 +133,16 @@ const ProfileHeader = ({
                     </DropdownMenuItem>
                   </Link>
                 ) : (
-                  <></>
+                  <Link
+                    href={{
+                      pathname: "/edit-circle",
+                      query: {
+                        id: accountId,
+                      },
+                    }}
+                  >
+                    <DropdownMenuItem>Edit circle</DropdownMenuItem>
+                  </Link>
                 )}
               </DropdownMenuContent>
             </DropdownMenu>
