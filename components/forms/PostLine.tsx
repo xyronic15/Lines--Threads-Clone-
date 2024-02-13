@@ -144,8 +144,8 @@ const PostLine = ({ userId, circleId, line, btnTitle }: Props) => {
               {/* <FormLabel className="">Text</FormLabel> */}
               <FormControl className="">
                 <Textarea
-                  rows={10}
-                  className="bg-none"
+                  rows={4}
+                  className="no-focus text-white outline-none focus-visible:ring-0 focus-visible:ring-offset-0 rounded-none bg-transparent border-b-2 border-x-0 border-t-0 border-b-slate-800"
                   placeholder="Write something here..."
                   {...field}
                 />
