@@ -1,14 +1,17 @@
 import LineCard from "@/components/cards/LineCard";
+import { fetchCirclePosts } from "@/lib/actions/circle.actions";
 import { fetchUserPosts, getReplies } from "@/lib/actions/user.actions";
 import { requestAsyncStorage } from "next/dist/client/components/request-async-storage.external";
 import Link from "next/link";
+import { MdAdminPanelSettings } from "react-icons/md";
 
 interface Props {
   currentUserId: string;
   accountId: string;
   areReplies: boolean;
   isCircle?: boolean;
-  results: any;
+  admin?: boolean;
+  results?: any;
 }
 
 const LinesTab = async ({
@@ -16,15 +19,14 @@ const LinesTab = async ({
   accountId,
   areReplies,
   isCircle,
+  admin,
 }: Props) => {
-  // TBC retrieve the posts based on whether this is a user posts, community posts, or replies tab
-  // if (isCircle) {
-  //   fetchUserPosts(accountId);
-  // }
-  // else
+  // retrieve the posts based on whether this is a user posts, community posts, or replies tab
   let result: any;
 
-  if (areReplies) {
+  if (isCircle) {
+    result = await fetchCirclePosts(accountId);
+  } else if (areReplies) {
     result = await getReplies(accountId);
   } else {
     result = await fetchUserPosts(accountId);
@@ -39,6 +41,7 @@ const LinesTab = async ({
           currentUserId={currentUserId}
           areReplies={areReplies}
           isCircle={isCircle}
+          admin={admin}
           results={result}
         />
       )}
@@ -47,7 +50,13 @@ const LinesTab = async ({
 };
 
 // All lines component that takes the results and returns a map of lines
-const Lines = ({ currentUserId, areReplies, isCircle, results }: Props) => {
+const Lines = ({
+  currentUserId,
+  areReplies,
+  isCircle,
+  admin,
+  results,
+}: Props) => {
   return (
     <>
       {results.posts.map((line) => {
@@ -93,6 +102,7 @@ const Lines = ({ currentUserId, areReplies, isCircle, results }: Props) => {
               editedAt={line.editedAt}
               active={line.active}
               comments={line.children}
+              admin={admin}
             />
           );
         }
@@ -114,7 +124,10 @@ const Replies = ({ currentUserId, results }: Props) => {
           let adjustedLikes = line.likes.map((like: any) => like.id);
 
           return (
-            <Link href={`/line/${line.parentId}`} className="hover:bg-slate-800 transition-all duration-150">
+            <Link
+              href={`/line/${line.parentId}`}
+              className="hover:bg-slate-800 transition-all duration-150"
+            >
               <LineCard
                 key={line._id}
                 id={line._id}

@@ -53,3 +53,17 @@ export const profileTabs = [
         icon: <BiSolidMessageSquareAdd size={24} />,
     }
 ]
+
+// tabs for the circle page
+export const circleTabs = [
+    {
+        value: "lines",
+        label: "Lines",
+        icon: <PiSignature size={24} />,
+    },
+    {
+        value: "members",
+        label: "Members",
+        icon: <FaRegUserCircle size={24} />,
+    }
+]

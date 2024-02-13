@@ -179,3 +179,42 @@ export async function leaveCircle(
     throw new Error(`Failed to leave the circle: $(e.message)`);
   }
 }
+
+// fetch a circle's posts given an id string
+export async function fetchCirclePosts(circleId: string) {
+  try {
+    connectToDB();
+
+    // find the circle in the database
+    const result = await Circle.findById(circleId).populate({
+      path: "posts",
+      model: Post,
+      populate: [
+        {
+          path: "author",
+          model: User,
+          select: "id name image",
+        }, // populate the circleId field with the circle's mongoid, name and PFP]
+        {
+          path: "likes",
+          model: User,
+          select: "id -_id",
+        }, // populate the likes field with the user's id from clerk
+        {
+          path: "children",
+          model: Post,
+          populate: {
+            path: "author",
+            model: User,
+            select: "id name image", // populate the author field with the user's  clerkid, name and PFP
+          },
+        },
+      ],
+      options: { sort: { createdAt: -1 } },
+    });
+
+    return result;
+  } catch (e: any) {
+    throw new Error(`Failed to fetch the circle's posts: $(e.message)`);
+  }
+}

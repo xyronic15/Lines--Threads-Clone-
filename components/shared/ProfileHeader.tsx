@@ -120,7 +120,7 @@ const ProfileHeader = ({
         {/* TBC edit profile/circle button */}
         <div className="flex items-start">
           {(accountId === currentUserId ||
-            admins.some((id) => currentUserId === id)) && (
+            admins?.some((id) => currentUserId === id)) && (
             <DropdownMenu>
               <DropdownMenuTrigger className="text-white outline-none">
                 <BsThreeDots size={24} />

@@ -72,7 +72,7 @@ export async function fetchUserPosts(userId: string) {
         {
           path: "circle",
           model: Circle,
-          select: "_id name image",
+          select: "_id username name image",
         }, // populate the circleId field with the circle's mongoid, name and PFP]
         {
           path: "likes",
@@ -89,6 +89,7 @@ export async function fetchUserPosts(userId: string) {
           },
         },
       ],
+      options: { sort: { createdAt: -1 } },
     });
 
     return result;
