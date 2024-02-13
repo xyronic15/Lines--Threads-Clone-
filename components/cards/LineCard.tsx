@@ -41,6 +41,7 @@ interface Props {
   };
   circle: {
     _id: string;
+    username: string;
     name: string;
     image: string;
   } | null;
@@ -55,6 +56,7 @@ interface Props {
     };
   }[];
   isComment?: boolean;
+  admin?: boolean;
 }
 
 const LineCard = ({
@@ -71,6 +73,7 @@ const LineCard = ({
   active,
   comments,
   isComment,
+  admin,
 }: Props) => {
   // console.log(comments);
   return (
@@ -97,6 +100,25 @@ const LineCard = ({
             {/* TBC separator */}
           </div>
           <div className="flex w-full flex-col">
+            {!isComment && circle && (
+              <Link
+                href={`/circle/${circle._id}`}
+                className="flex items-center gap-2"
+              >
+                <div className="relative h-4 w-4">
+                  <Image
+                    src={circle.image}
+                    alt={circle.name}
+                    fill
+                    style={{ objectFit: "cover" }}
+                    className="cursor-pointer rounded-full"
+                  />
+                </div>
+                <p className="text-gray-500 text-sm">
+                  {circle && `ci/@${circle.username}`}
+                </p>
+              </Link>
+            )}
             <Link
               href={`/profile/${author.id}`}
               className="text-white cursor-pointer font-semibold"
@@ -122,23 +144,26 @@ const LineCard = ({
 
           {/* TBC delete and edit line component */}
           <div className="flex items-start">
-            {currentUserId === author.id && !isComment && active && (
+            {(currentUserId === author.id || admin) && !isComment && active && (
               <Dialog>
                 <DropdownMenu>
                   <DropdownMenuTrigger className="text-white outline-none">
                     <BsThreeDots size={24} />
                   </DropdownMenuTrigger>
                   <DropdownMenuContent className="bg-slate-950 text-white mr-20 translate-y-[-36px] border-0">
-                    <Link
-                      href={{
-                        pathname: "/edit-line",
-                        query: {
-                          id: id,
-                        },
-                      }}
-                    >
-                      <DropdownMenuItem>Edit line</DropdownMenuItem>
-                    </Link>
+                    {currentUserId === author.id && (
+                      <Link
+                        href={{
+                          pathname: "/edit-line",
+                          query: {
+                            id: id,
+                          },
+                        }}
+                      >
+                        <DropdownMenuItem>Edit line</DropdownMenuItem>
+                      </Link>
+                    )}
+
                     <DropdownMenuItem className="text-red-600">
                       <DialogTrigger className="w-full flex items-start">
                         Delete line
@@ -205,26 +230,6 @@ const LineCard = ({
           </div>
         )}
       </div>
-
-      {!isComment && circle && (
-        <Link
-          href={`/circles/${circle._id}`}
-          className="mt-5 flex items-center"
-        >
-          <p className="font-medium text-white">
-            {createdAt}
-            {circle && ` - ${circle.name} circle`}
-          </p>
-
-          <Image
-            src={circle.image}
-            alt={circle.name}
-            width={14}
-            height={14}
-            className="ml-1 rounded-full object-cover"
-          />
-        </Link>
-      )}
     </article>
   );
 };

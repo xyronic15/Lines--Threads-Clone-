@@ -31,7 +31,12 @@ export async function createPost({
     connectToDB();
 
     // create a new post
-    const createdPost = await Post.create({ text, media, author, circleId });
+    const createdPost = await Post.create({
+      text,
+      media,
+      author,
+      circle: circleId,
+    });
 
     // update the user's posts
     await User.findByIdAndUpdate(author, {
@@ -67,7 +72,7 @@ export async function fetchPostById(postId: string) {
       .populate({
         path: "circle",
         model: Circle,
-        select: "_id name image",
+        select: "_id username name image",
       }) // populate the circleId field with the circle's mongoid, name and PFP
       .populate({
         path: "likes",
