@@ -91,17 +91,17 @@ export async function fetchCircle(circleId: string) {
       .populate({
         path: "owner",
         model: User,
-        select: "_id id name image",
+        select: "_id id username name image",
       })
       .populate({
         path: "admins",
         model: User,
-        select: "_id id name image",
+        select: "_id id username name image",
       })
       .populate({
         path: "members",
         model: User,
-        select: "_id id name image",
+        select: "_id id username name image",
       })
       .select("-posts")
       .exec();
@@ -216,5 +216,55 @@ export async function fetchCirclePosts(circleId: string) {
     return result;
   } catch (e: any) {
     throw new Error(`Failed to fetch the circle's posts: $(e.message)`);
+  }
+}
+
+// function that makes a user an admin
+export async function makeAdmin(
+  userId: string,
+  circleId: string,
+  path: string
+) {
+  try {
+    connectToDB();
+
+    // find the user in the database
+    const user = await User.findOne({ id: userId }).select("_id");
+
+    // update the circle's admins and remove them from the members list
+    await Circle.findByIdAndUpdate(circleId, {
+      $push: { admins: user._id },
+      $pull: { members: user._id },
+    });
+
+    revalidatePath(path);
+  } catch (e: any) {
+    throw new Error(`Failed to make the user an admin: $(e.message)`);
+  }
+}
+
+// function that removes the user from being an admin in the circle
+export async function removeAdmin(
+  userId: string,
+  circleId: string,
+  path: string
+) {
+  try {
+    connectToDB();
+
+    // find the user in the database
+    const user = await User.findOne({ id: userId }).select("_id");
+
+    // update the circle's admins and remove them from the admins list and add them to the members list
+    await Circle.findByIdAndUpdate(circleId, {
+      $pull: { admins: user._id },
+      $push: { members: user._id },
+    });
+
+    revalidatePath(path);
+  } catch (e: any) {
+    throw new Error(
+      `Failed to remove the user from being an admin: $(e.message)`
+    );
   }
 }
