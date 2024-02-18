@@ -7,6 +7,7 @@ import { fetchUser } from "@/lib/actions/user.actions";
 import { fetchCircle } from "@/lib/actions/circle.actions";
 import { circleTabs } from "@/constants";
 import PostLine from "@/components/forms/PostLine";
+import MembersTab from "@/components/shared/MembersTab";
 
 const Page = async ({ params }: { params: { id: string } }) => {
   // get the current user
@@ -59,16 +60,18 @@ const Page = async ({ params }: { params: { id: string } }) => {
             <TabsContent key={`${tab.value}-content`} value={tab.value}>
               {tab.label === "Lines" ? (
                 <>
-                  <PostLine
-                    userId={currUserInfo._id}
-                    circleId={circle._id}
-                    line={{
-                      id: "",
-                      text: "",
-                      media: [],
-                    }}
-                    btnTitle="Post"
-                  />
+                  {isFollowingMember && (
+                    <PostLine
+                      userId={currUserInfo._id}
+                      circleId={circle._id}
+                      line={{
+                        id: "",
+                        text: "",
+                        media: [],
+                      }}
+                      btnTitle="Post"
+                    />
+                  )}
 
                   <LinesTab
                     currentUserId={currUserInfo.id}
@@ -78,7 +81,15 @@ const Page = async ({ params }: { params: { id: string } }) => {
                     admin={isAdmin}
                   />
                 </>
-              ) : null}
+              ) : (
+                <MembersTab
+                  currentUserId={currUserInfo.id}
+                  circleId={circle._id}
+                  owner={owner}
+                  admins={admins}
+                  members={members}
+                />
+              )}
             </TabsContent>
           ))}
         </Tabs>
