@@ -44,6 +44,7 @@ const Page = async ({ params }: { params: { id: string } }) => {
         postCounts={userInfo.posts.length}
         followers={followers.length}
         following={following.length}
+        circles={userInfo.circles.length}
         isFollowingMember={isFollowingMember}
       />
 

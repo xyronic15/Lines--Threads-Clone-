@@ -24,6 +24,7 @@ interface Props {
   postCounts?: number; // only use if user
   followers?: number; // only use if user
   following?: number; // only use if user
+  circles?: number; // only if user
   isFollowingMember: boolean; // check if current user if following or if they are a member
   // Circle values
   isCircle?: boolean; // check if this is community or not
@@ -42,6 +43,7 @@ const ProfileHeader = ({
   postCounts,
   followers,
   following,
+  circles,
   isFollowingMember,
   isCircle,
   ownerId,
@@ -102,6 +104,10 @@ const ProfileHeader = ({
               <div className="text-white flex flex-col justify-start">
                 <p className="text-sm font-bold">Following</p>
                 <p className="text-sm">{following}</p>
+              </div>
+              <div className="text-white flex flex-col justify-start">
+                <p className="text-sm font-bold">Circles</p>
+                <p className="text-sm">{circles}</p>
               </div>
             </div>
           ) : (
