@@ -28,8 +28,6 @@ const CommentButton = ({ id, comments }: Props) => {
       <p className="text-white">{comments.length}</p>
     </div>
   );
-  // console.log(comments.length);
-  // return <></>;
 };
 
 export default CommentButton;

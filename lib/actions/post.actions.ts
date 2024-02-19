@@ -24,8 +24,6 @@ export async function createPost({
   circleId,
   path,
 }: PostParams) {
-  // console.log(author);
-
   // connect to the database
   try {
     connectToDB();
@@ -127,8 +125,6 @@ export async function editPostById({
       editedAt: new Date(),
       createdAt: post.createdAt,
     });
-
-    // console.log(updatedPost);
 
     // revalidate the path
     revalidatePath(path);

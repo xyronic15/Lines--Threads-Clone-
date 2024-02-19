@@ -188,8 +188,6 @@ export async function getActivity(userId: string) {
       return b.date - a.date;
     });
 
-    // console.log(activity);
-
     return activity;
   } catch (e: any) {
     throw new Error(`Failed to get activity: ${e.message}`);

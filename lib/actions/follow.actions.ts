@@ -18,15 +18,9 @@ export async function addFollower({ followerId, followingId, path }: Params) {
   try {
     connectToDB();
 
-    // console.log(followerId);
-    // console.log(followingId);
-
     // find the users in the database
     const follower = await User.findOne({ id: followerId }).select("_id");
     const following = await User.findOne({ id: followingId }).select("_id");
-
-    // console.log(following);
-    // console.log(follower);
 
     // create a new follow object
     const newFollow = await Follow.create({

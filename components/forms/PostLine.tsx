@@ -98,7 +98,6 @@ const PostLine = ({ userId, circleId, line, btnTitle }: Props) => {
 
   // submit function
   const onSubmit = async (values: z.infer<typeof LineValidation>) => {
-    // console.log(values);
 
     // if the route is edit-line then use editPostById
     // else use createPost

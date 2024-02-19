@@ -81,7 +81,7 @@ export async function updateCircle({
   }
 }
 
-// TBC function to fetch a circle's details given a circleId
+// function to fetch a circle's details given a circleId
 export async function fetchCircle(circleId: string) {
   try {
     connectToDB();

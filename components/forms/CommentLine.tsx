@@ -91,7 +91,6 @@ const CommentLine = ({ currentUserId, currentUserImg, postId }: Props) => {
 
   //   submit function
   const onSubmit = async (values: z.infer<typeof CommentValidation>) => {
-    // console.log(values);
 
     await addComment(
       currentUserId,

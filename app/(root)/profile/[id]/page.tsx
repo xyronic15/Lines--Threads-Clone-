@@ -31,7 +31,6 @@ const Page = async ({ params }: { params: { id: string } }) => {
     (follower) => follower.follower.id === currUserInfo.id
   );
 
-  // console.log(userInfo);
   return (
     <section>
       <ProfileHeader
@@ -67,7 +66,7 @@ const Page = async ({ params }: { params: { id: string } }) => {
           </TabsList>
           {profileTabs.map((tab) => (
             <TabsContent key={`${tab.value}-content`} value={tab.value}>
-              {/* TBC LinesTab for user posts and replies */}
+              {/* LinesTab for user posts and replies */}
               <LinesTab
                 currentUserId={user.id}
                 accountId={userInfo.id}

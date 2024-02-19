@@ -68,7 +68,7 @@ const ProfileHeader = ({
             {/* name */}
             <h2 className="text-white">{name}</h2>
             {/* follow button */}
-            {/* TBC join circle button */}
+            {/* join circle button */}
             {!isCircle
               ? currentUserId !== accountId && (
                   <FollowButton
@@ -89,7 +89,7 @@ const ProfileHeader = ({
           {/* username */}
           <p className="text-gray-500">@{username}</p>
 
-          {/* TBC post count, followers, following if not a circle*/}
+          {/* post count, followers, following, circles count if not a circle*/}
           {/* else members count*/}
           {!isCircle ? (
             <div className="flex flex-row gap-4">
@@ -123,7 +123,7 @@ const ProfileHeader = ({
             </div>
           )}
         </div>
-        {/* TBC edit profile/circle button */}
+        {/* edit profile/circle button */}
         <div className="flex items-start">
           {(accountId === currentUserId ||
             admins?.some((id) => currentUserId === id)) && (

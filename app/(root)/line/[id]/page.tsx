@@ -18,7 +18,6 @@ const page = async ({ params }: { params: { id: string } }) => {
 
   // get the post by id from mongodb
   const line = await fetchPostById(params.id);
-  // console.log(line.adjustedLikes);
 
   return (
     <section className="relative">
@@ -41,7 +40,7 @@ const page = async ({ params }: { params: { id: string } }) => {
         <p className="text-white">{typeof line._id}</p> */}
       </div>
 
-      {/* TBC Comment form */}
+      {/* Comment form */}
       <div className="mt-7">
         <CommentLine
           currentUserId={userInfo._id}

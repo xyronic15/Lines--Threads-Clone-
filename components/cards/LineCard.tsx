@@ -75,7 +75,6 @@ const LineCard = ({
   isComment,
   admin,
 }: Props) => {
-  // console.log(comments);
   return (
     <article
       className={`flex w-full flex-col gap-2 ${
@@ -142,7 +141,7 @@ const LineCard = ({
             {/* <p className="mt-2 text-white whitespace-pre-wrap">{text}</p> */}
           </div>
 
-          {/* TBC delete and edit line component */}
+          {/* delete and edit line component */}
           <div className="flex items-start">
             {(currentUserId === author.id || admin) && !isComment && active && (
               <Dialog>
@@ -195,7 +194,7 @@ const LineCard = ({
         </div>
       </div>
 
-      {/* tbc make preview images if it is a comment */}
+      {/* Media */}
       {media.length > 0 && (
         <div className="col-span-2 my-2">
           <MediaCarousel media={media} />

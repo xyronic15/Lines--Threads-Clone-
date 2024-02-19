@@ -39,7 +39,6 @@ const MembersTab = ({
   admins,
   members,
 }: Props) => {
-  // const pathname = usePathname();
   const isOwner = currentUserId === owner.id;
   const isAdmin = admins.some((admin) => admin.id === currentUserId);
   return (
