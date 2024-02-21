@@ -210,3 +210,54 @@ export async function addComment(
     throw new Error(`Failed to add comment: ${e.message}`);
   }
 }
+
+//function that searches for posts based on the text of the post
+export async function searchPosts(query: string) {
+  try {
+    connectToDB();
+
+    if (!query) {
+      return {};
+    }
+
+    // search for posts based on text
+    const posts = await Post.find({
+      text: { $regex: query, $options: "i" },
+    })
+      .populate(
+        {
+          path: "author",
+          model: User,
+          select: "id name image",
+        } // populate the circleId field with the circle's mongoid, name and PFP]
+      )
+      .populate(
+        {
+          path: "likes",
+          model: User,
+          select: "id -_id",
+        } // populate the likes field with the user's id from clerk
+      )
+      .populate(
+        {
+          path: "circle",
+          model: Circle,
+          select: "_id username name image",
+        } // populate the circleId field with the circle's mongoid, name and PFP]
+      )
+      .populate({
+        path: "children",
+        model: Post,
+        populate: {
+          path: "author",
+          model: User,
+          select: "id name image", // populate the author field with the user's  clerkid, name and PFP
+        },
+      })
+      .sort({ createdAt: -1 });
+
+    return { posts: posts };
+  } catch (e: any) {
+    throw new Error(`Failed to search posts: ${e.message}`);
+  }
+}
