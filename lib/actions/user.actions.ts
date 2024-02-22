@@ -193,3 +193,46 @@ export async function getActivity(userId: string) {
     throw new Error(`Failed to get activity: ${e.message}`);
   }
 }
+
+// function that gets the circles of a given user
+export async function fetchUserCircles(userId: string) {
+  try {
+    connectToDB();
+
+    // find the user in the database
+    const user = await User.findOne({ id: userId }).populate({
+      path: "circles",
+      model: Circle,
+      select: "_id name username image admins members",
+    });
+
+    return user.circles;
+  } catch (e: any) {
+    throw new Error(`Failed to fetch user circles: ${e.message}`);
+  }
+}
+
+// function that searches for users based on username, name or bio
+export async function searchUsers(currentUserId: string, query: string) {
+  try {
+    connectToDB();
+
+    if (!query) {
+      return [];
+    }
+
+    // search for users based on username, name or bio
+    const users = await User.find({
+      id: { $ne: currentUserId }, // Exclude the current user
+      $or: [
+        { name: { $regex: query, $options: "i" } }, // Case-insensitive regex for name
+        { username: { $regex: query, $options: "i" } }, // Case-insensitive regex for username
+        { bio: { $regex: query, $options: "i" } }, // Case-insensitive regex for bio
+      ],
+    });
+
+    return users;
+  } catch (e: any) {
+    throw new Error(`Failed to find users: ${e.message}`);
+  }
+}

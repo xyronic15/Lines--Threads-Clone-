@@ -67,3 +67,17 @@ export const circleTabs = [
         icon: <FaRegUserCircle size={24} />,
     }
 ]
+
+// tabs for the search page
+export const searchTabs = [
+    {
+        value: "lines",
+        label: "Lines",
+        icon: <PiSignature size={24} />,
+    },
+    {
+        value: "users",
+        label: "Users",
+        icon: <FaRegUserCircle size={24} />,
+    }
+]

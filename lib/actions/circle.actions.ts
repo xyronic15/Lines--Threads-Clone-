@@ -268,3 +268,27 @@ export async function removeAdmin(
     );
   }
 }
+
+// function that searches for circles based on username, name or bio
+export async function searchCircles(query: string) {
+  try {
+    connectToDB();
+
+    if (!query) {
+      return [];
+    }
+
+    // search for circles based on username, name or bio
+    const circles = await Circle.find({
+      $or: [
+        { name: { $regex: query, $options: "i" } }, // Case-insensitive regex for name
+        { username: { $regex: query, $options: "i" } }, // Case-insensitive regex for username
+        { bio: { $regex: query, $options: "i" } }, // Case-insensitive regex for bio
+      ],
+    }).select("_id name username image admins members");
+
+    return circles;
+  } catch (e: any) {
+    throw new Error(`Failed to find circles: ${e.message}`);
+  }
+}
