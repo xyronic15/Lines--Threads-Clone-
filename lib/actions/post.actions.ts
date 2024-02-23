@@ -217,7 +217,7 @@ export async function searchPosts(query: string) {
     connectToDB();
 
     if (!query) {
-      return {};
+      return { posts: [] };
     }
 
     // search for posts based on text

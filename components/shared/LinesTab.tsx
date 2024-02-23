@@ -68,7 +68,7 @@ const Lines = ({
 }: Props) => {
   return (
     <>
-      {results.hasOwnProperty("posts") && results?.posts.length !== 0 ? (
+      {results?.posts.length !== 0 ? (
         results.posts.map((line) => {
           // check if the post is active or not
           if (!line.active) {
@@ -78,42 +78,47 @@ const Lines = ({
             let adjustedLikes = line.likes.map((like: any) => like.id);
 
             return (
-              <LineCard
-                key={line._id}
-                id={line._id}
-                currentUserId={currentUserId}
-                parentId={line.parentId}
-                text={line.text}
-                media={line.media}
-                author={
-                  !areReplies && !isCircle && !isSearch
-                    ? {
-                        id: results.id,
-                        name: results.name,
-                        image: results.image,
-                      }
-                    : {
-                        id: line.author.id,
-                        name: line.author.name,
-                        image: line.author.image,
-                      }
-                }
-                circle={
-                  isCircle
-                    ? {
-                        _id: results._id,
-                        name: results.name,
-                        image: results.image,
-                      }
-                    : line.circle
-                }
-                createdAt={line.createdAt}
-                adjustedLikes={adjustedLikes}
-                editedAt={line.editedAt}
-                active={line.active}
-                comments={line.children}
-                admin={admin}
-              />
+              <Link
+                href={`/line/${line.parentId ? line.parentId : line._id}`}
+                // className="hover:bg-slate-800 transition-all duration-150"
+              >
+                <LineCard
+                  key={line._id}
+                  id={line._id}
+                  currentUserId={currentUserId}
+                  parentId={line.parentId}
+                  text={line.text}
+                  media={line.media}
+                  author={
+                    !areReplies && !isCircle && !isSearch
+                      ? {
+                          id: results.id,
+                          name: results.name,
+                          image: results.image,
+                        }
+                      : {
+                          id: line.author.id,
+                          name: line.author.name,
+                          image: line.author.image,
+                        }
+                  }
+                  circle={
+                    isCircle
+                      ? {
+                          _id: results._id,
+                          name: results.name,
+                          image: results.image,
+                        }
+                      : line.circle
+                  }
+                  createdAt={line.createdAt}
+                  adjustedLikes={adjustedLikes}
+                  editedAt={line.editedAt}
+                  active={line.active}
+                  comments={line.children}
+                  admin={admin}
+                />
+              </Link>
             );
           }
         })
