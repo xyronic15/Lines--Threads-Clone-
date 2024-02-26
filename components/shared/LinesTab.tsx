@@ -1,6 +1,6 @@
 import LineCard from "@/components/cards/LineCard";
 import { fetchCirclePosts } from "@/lib/actions/circle.actions";
-import { searchPosts } from "@/lib/actions/post.actions";
+import { searchPosts, fetchHomePosts } from "@/lib/actions/post.actions";
 import { fetchUserPosts, getReplies } from "@/lib/actions/user.actions";
 import { requestAsyncStorage } from "next/dist/client/components/request-async-storage.external";
 import Link from "next/link";
@@ -13,6 +13,7 @@ interface Props {
   areReplies: boolean;
   isSearch?: boolean;
   isCircle?: boolean;
+  isHome?: boolean;
   admin?: boolean;
   results?: any;
 }
@@ -24,12 +25,29 @@ const LinesTab = async ({
   areReplies,
   isSearch,
   isCircle,
+  isHome,
   admin,
 }: Props) => {
   // retrieve the posts based on whether this is a user posts, community posts, or replies tab
   let result: any;
 
-  if (isSearch) {
+  if (isHome) {
+    let followingPosts: any, circlePosts: any, latestPosts: any;
+    [followingPosts, circlePosts, latestPosts] = await fetchHomePosts(
+      currentUserId
+    );
+
+    // combine the followingPosts and circlePosts then sort by date
+    let personalizedPosts = [...followingPosts, ...circlePosts];
+    personalizedPosts.sort(
+      (a: any, b: any) =>
+        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+    );
+
+    // concatenate the latest posts to the end of the personalizedPosts
+    result = { posts: [...personalizedPosts, ...latestPosts] };
+    // console.log(result);
+  } else if (isSearch) {
     result = await searchPosts(query);
   } else if (isCircle) {
     result = await fetchCirclePosts(accountId);
@@ -49,6 +67,7 @@ const LinesTab = async ({
           areReplies={areReplies}
           isSearch={isSearch}
           isCircle={isCircle}
+          isHome={isHome}
           admin={admin}
           results={result}
         />
@@ -63,6 +82,7 @@ const Lines = ({
   areReplies,
   isSearch,
   isCircle,
+  isHome,
   admin,
   results,
 }: Props) => {
@@ -90,7 +110,7 @@ const Lines = ({
                   text={line.text}
                   media={line.media}
                   author={
-                    !areReplies && !isCircle && !isSearch
+                    !areReplies && !isCircle && !isSearch && !isHome
                       ? {
                           id: results.id,
                           name: results.name,

@@ -30,7 +30,7 @@ export const navLinks = [
     },
     {
         label: "Circles",
-        path: "/circles",
+        path: "/circle",
         icon: <PiCirclesThreeBold size={24} />,
     },
     {

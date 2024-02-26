@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import Post from "../models/post.model";
 import User from "../models/user.model";
 import Circle from "../models/circle.model";
+import Follow from "../models/follow.model";
 import { connectToDB } from "../mongoose";
 
 // interface params for a post
@@ -259,5 +260,156 @@ export async function searchPosts(query: string) {
     return { posts: posts };
   } catch (e: any) {
     throw new Error(`Failed to search posts: ${e.message}`);
+  }
+}
+
+// function that retrieves the most recent posts for the home page
+export async function fetchHomePosts(userId: string) {
+  try {
+    connectToDB();
+
+    // find the user in the database
+    const user = await User.findOne({ id: userId });
+
+    // get the list of people that the user follows
+    const following = await Follow.find({ follower: user._id }).select(
+      "following"
+    );
+
+    // get the last three posts for each user in the following list
+    const followingPosts = await Post.find({
+      author: { $in: following.map((follow: any) => follow.following) },
+      parentId: { $exists: false }, // Find posts without parentId (null or undefined)
+    })
+      .populate({
+        path: "author",
+        model: User,
+        select: "_id id name image",
+      }) // populate the author field with the user's mongoid, clerkid, name and PFP
+      .populate({
+        path: "circle",
+        model: Circle,
+        select: "_id username name image",
+      }) // populate the circleId field with the circle's mongoid, name and PFP
+      .populate({
+        path: "likes",
+        model: User,
+        select: "id -_id",
+      }) // populate the likes field with the user's id from clerk
+      .populate({
+        path: "children", //populate the children field
+        populate: [
+          {
+            path: "author",
+            model: User,
+            select: "_id id name parentId image",
+          },
+          {
+            path: "children", //populate the children field within children
+            model: Post, // the model of the nested children
+            populate: {
+              path: "author",
+              model: User,
+              select: "_id id name parentId image",
+            },
+          },
+        ],
+      })
+      .sort({ createdAt: -1 })
+      .limit(3);
+
+    // get the last three posts for the circles that the user is in
+    const circlePosts = await Post.find({
+      _id: { $not: { $in: followingPosts.map((post: any) => post._id) } },
+      author: { $ne: user._id },
+      circle: { $in: user.circles },
+      parentId: { $exists: false }, // Find posts without parentId (null or undefined)
+    })
+      .populate({
+        path: "author",
+        model: User,
+        select: "_id id name image",
+      }) // populate the author field with the user's mongoid, clerkid, name and PFP
+      .populate({
+        path: "circle",
+        model: Circle,
+        select: "_id username name image",
+      }) // populate the circleId field with the circle's mongoid, name and PFP
+      .populate({
+        path: "likes",
+        model: User,
+        select: "id -_id",
+      }) // populate the likes field with the user's id from clerk
+      .populate({
+        path: "children", //populate the children field
+        populate: [
+          {
+            path: "author",
+            model: User,
+            select: "_id id name parentId image",
+          },
+          {
+            path: "children", //populate the children field within children
+            model: Post, // the model of the nested children
+            populate: {
+              path: "author",
+              model: User,
+              select: "_id id name parentId image",
+            },
+          },
+        ],
+      })
+      .sort({ createdAt: -1 })
+      .limit(3);
+
+    // retrieve the latest posts excluding the ones retrieved from the user's following and circles
+    const latestPosts = await Post.find({
+      author: {
+        $not: {
+          $in: [...following.map((follow: any) => follow.following), user._id],
+        },
+      },
+      circle: { $not: { $in: user.circles } },
+      parentId: { $exists: false }, // Find posts without parentId (null or undefined)
+    })
+      .populate({
+        path: "author",
+        model: User,
+        select: "_id id name image",
+      }) // populate the author field with the user's mongoid, clerkid, name and PFP
+      .populate({
+        path: "circle",
+        model: Circle,
+        select: "_id username name image",
+      }) // populate the circleId field with the circle's mongoid, name and PFP
+      .populate({
+        path: "likes",
+        model: User,
+        select: "id -_id",
+      }) // populate the likes field with the user's id from clerk
+      .populate({
+        path: "children", //populate the children field
+        populate: [
+          {
+            path: "author",
+            model: User,
+            select: "_id id name parentId image",
+          },
+          {
+            path: "children", //populate the children field within children
+            model: Post, // the model of the nested children
+            populate: {
+              path: "author",
+              model: User,
+              select: "_id id name parentId image",
+            },
+          },
+        ],
+      })
+      .sort({ createdAt: -1 });
+
+    return [followingPosts, circlePosts, latestPosts];
+  } catch (e: any) {
+    throw new Error(`Failed to fetch recent posts: ${e.message}`);
   }
 }

@@ -2,6 +2,7 @@ import { fetchUser } from "@/lib/actions/user.actions";
 import { currentUser } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
 import Image from "next/image";
+import LinesTab from "@/components/shared/LinesTab";
 
 const Home = async () => {
   // get the current user
@@ -14,8 +15,8 @@ const Home = async () => {
 
   return (
     <>
-      <Image src={userInfo?.image || ""} width={96} height={96} />
       <h1>Home</h1>
+      <LinesTab currentUserId={user.id} areReplies={false} isHome />
     </>
   );
 };
