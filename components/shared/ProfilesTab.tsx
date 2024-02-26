@@ -89,7 +89,7 @@ const Circles = ({ currentUserCircles, circles, query }: any) => {
             >
               <div className="flex items-center align-middle">
                 <Link
-                  href={`/profile/${circle.id}`}
+                  href={`/circle/${circle._id}`}
                   className="relative h-11 w-11"
                 >
                   <Image
@@ -102,7 +102,7 @@ const Circles = ({ currentUserCircles, circles, query }: any) => {
                 </Link>
               </div>
               <div className="flex w-full flex-col">
-                <Link href={`/profile/${circle.id}`}>
+                <Link href={`/circle/${circle._id}`}>
                   <p className="text-white cursor-pointer font-semibold">
                     {circle.name}
                   </p>
@@ -126,7 +126,7 @@ const Circles = ({ currentUserCircles, circles, query }: any) => {
             >
               <div className="flex items-center align-middle">
                 <Link
-                  href={`/profile/${circle.id}`}
+                  href={`/circle/${circle._id}`}
                   className="relative h-11 w-11"
                 >
                   <Image
@@ -139,7 +139,7 @@ const Circles = ({ currentUserCircles, circles, query }: any) => {
                 </Link>
               </div>
               <div className="flex w-full flex-col">
-                <Link href={`/profile/${circle.id}`}>
+                <Link href={`/circle/${circle._id}`}>
                   <p className="text-white cursor-pointer font-semibold">
                     {circle.name}
                   </p>

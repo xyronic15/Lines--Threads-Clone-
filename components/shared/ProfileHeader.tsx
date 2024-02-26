@@ -114,7 +114,7 @@ const ProfileHeader = ({
             <div className="flex flex-row gap-4">
               <div className="text-white flex flex-col justify-start">
                 <p className="text-sm font-bold">Admins</p>
-                <p className="text-sm">{admins.length}</p>
+                <p className="text-sm">{admins && admins.length}</p>
               </div>
               <div className="text-white flex flex-col justify-start">
                 <p className="text-sm font-bold">Members</p>
