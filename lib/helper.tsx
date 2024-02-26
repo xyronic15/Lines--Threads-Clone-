@@ -8,7 +8,7 @@ export function formatText(text: string, linkClass: string) {
   };
 
   // function adds the link to the text if it is a link
-  const addMarkup = (word: string, linkClass: string) => {
+  const addMarkup = (word: string, linkClass: string): string => {
     // split the text if newline is found
     if (word.includes("\n")) {
       const words = word.split("\n");
