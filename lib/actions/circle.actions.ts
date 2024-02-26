@@ -51,7 +51,7 @@ export async function createCircle({
       $push: { circles: circle._id },
     });
   } catch (e: any) {
-    throw new Error(`Failed to create a circle: $(e.message)`);
+    throw new Error(`Failed to create a circle: ${e.message}`);
   }
 }
 
@@ -77,7 +77,7 @@ export async function updateCircle({
 
     revalidatePath(path);
   } catch (e: any) {
-    throw new Error(`Failed to update the circle's information: $(e.message)`);
+    throw new Error(`Failed to update the circle's information: ${e.message}`);
   }
 }
 
@@ -116,7 +116,7 @@ export async function fetchCircle(circleId: string) {
 
     return [circle, circleQuery.owner, circleQuery.admins, circleQuery.members];
   } catch (e: any) {
-    throw new Error(`Failed to fetch the circle: $(e.message)`);
+    throw new Error(`Failed to fetch the circle: ${e.message}`);
   }
 }
 
@@ -143,7 +143,7 @@ export async function joinCircle(
 
     revalidatePath(path);
   } catch (e: any) {
-    throw new Error(`Failed to join the circle: $(e.message)`);
+    throw new Error(`Failed to join the circle: ${e.message}`);
   }
 }
 
@@ -176,7 +176,7 @@ export async function leaveCircle(
 
     revalidatePath(path);
   } catch (e: any) {
-    throw new Error(`Failed to leave the circle: $(e.message)`);
+    throw new Error(`Failed to leave the circle: ${e.message}`);
   }
 }
 
@@ -215,7 +215,7 @@ export async function fetchCirclePosts(circleId: string) {
 
     return result;
   } catch (e: any) {
-    throw new Error(`Failed to fetch the circle's posts: $(e.message)`);
+    throw new Error(`Failed to fetch the circle's posts: ${e.message}`);
   }
 }
 
@@ -239,7 +239,7 @@ export async function makeAdmin(
 
     revalidatePath(path);
   } catch (e: any) {
-    throw new Error(`Failed to make the user an admin: $(e.message)`);
+    throw new Error(`Failed to make the user an admin: ${e.message}`);
   }
 }
 
@@ -264,7 +264,7 @@ export async function removeAdmin(
     revalidatePath(path);
   } catch (e: any) {
     throw new Error(
-      `Failed to remove the user from being an admin: $(e.message)`
+      `Failed to remove the user from being an admin: ${e.message}`
     );
   }
 }
