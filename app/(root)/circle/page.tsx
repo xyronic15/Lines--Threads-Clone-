@@ -24,7 +24,7 @@ const Page = async ({
       <div className="mt-9 overflow-y-scroll h-full">
         <ProfilesTab
           currentUserId={user.id}
-          query={searchParams.q}
+          query={searchParams.q || ""}
           type="circles"
         />
       </div>
