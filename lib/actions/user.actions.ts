@@ -41,7 +41,7 @@ export async function updateUser({
       revalidatePath(path);
     }
   } catch (e: any) {
-    throw new Error(`Failed to onboard/update user: $(e.message)`);
+    throw new Error(`Failed to onboard/update user: ${e.message}`);
   }
 }
 
@@ -55,7 +55,7 @@ export async function fetchUser(userId: string) {
 
     return user;
   } catch (e: any) {
-    throw new Error(`Failed to fetch user: $(e.message)`);
+    throw new Error(`Failed to fetch user: ${e.message}`);
   }
 }
 
@@ -94,7 +94,7 @@ export async function fetchUserPosts(userId: string) {
 
     return result;
   } catch (e: any) {
-    throw new Error(`Failed to fetch user posts: $(e.message)`);
+    throw new Error(`Failed to fetch user posts: ${e.message}`);
   }
 }
 
