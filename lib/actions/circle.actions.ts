@@ -56,14 +56,14 @@ export async function createCircle({
 }
 
 // function that updates a circle's details
-export async function updateCircle({
-  circleId,
-  username,
-  name,
-  bio,
-  image,
-  path,
-}: CircleParams): Promise<void> {
+export async function updateCircle(
+  circleId: string,
+  username: string,
+  name: string,
+  bio: string,
+  image: string,
+  path: string
+): Promise<void> {
   // connect to the database
   try {
     connectToDB();

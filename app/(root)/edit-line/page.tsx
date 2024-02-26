@@ -5,7 +5,7 @@ import Image from "next/image";
 import PostLine from "@/components/forms/PostLine";
 import { fetchPostById } from "@/lib/actions/post.actions";
 
-const Page = async ({ params }: { params: { id: string } }) => {
+const Page = async ({ searchParams }: { searchParams: { id: string } }) => {
   // get the current user
   const user = await currentUser();
   if (!user) return null;
@@ -15,8 +15,7 @@ const Page = async ({ params }: { params: { id: string } }) => {
   if (!userInfo?.onboarded) redirect("/onboarding");
 
   // get the post by id from mongodb
-  const line = await fetchPostById(params.id);
-  console.log(line);
+  const line = await fetchPostById(searchParams.id);
 
   //   redirect if the current user doesn't match the post's author
   if (line.author.id !== user.id) redirect("/");

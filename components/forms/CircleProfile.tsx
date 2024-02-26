@@ -93,14 +93,14 @@ export const CircleProfile = ({ userId, circle, btnTitle }: Props) => {
         image: values.profile_photo,
       });
     } else if (pathname === "/edit-circle") {
-      await updateCircle({
-        circleId: circle.id,
-        username: values.username,
-        name: values.name,
-        bio: values.bio,
-        image: values.profile_photo,
-        path: pathname,
-      });
+      await updateCircle(
+        circle.id,
+        values.username,
+        values.name,
+        values.bio,
+        values.profile_photo,
+        pathname
+      );
     }
 
     if (pathname === "/profile/edit-circle") {

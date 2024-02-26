@@ -4,7 +4,7 @@ import { fetchUser } from "@/lib/actions/user.actions";
 import { currentUser } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
 
-const Page = async ({ params }: { params: { id: string } }) => {
+const Page = async ({ searchParams }: { searchParams: { id: string } }) => {
   const user = await currentUser();
   if (!user) return null;
 
@@ -15,11 +15,11 @@ const Page = async ({ params }: { params: { id: string } }) => {
   if (!userInfo.onboarded) redirect("/onboarding");
 
   // retrieve circle details by id
-  const [circle, owner, admins, members] = await fetchCircle(params.id);
+  const [circle, owner, admins, members] = await fetchCircle(searchParams.id);
 
   // check if current user is the owner or an admin, redirect if not
   if (!admins.some((admin: any) => admin.id === userInfo.id))
-    redirect(`/circle/${params.id}`);
+    redirect(`/circle/${searchParams.id}`);
 
   const circleData = {
     id: circle._id,
