@@ -68,6 +68,12 @@ const AccountProfile = ({ user, btnTitle }: Props) => {
 
       if (!file.type.includes("image")) return;
 
+      // if the file exceeds 10mb then return message
+      if (file.size > 10000000) {
+        alert("File size exceeds 10mb");
+        return;
+      }
+
       fileReader.onload = async (event) => {
         const imageDataUrl = event.target?.result?.toString() || "";
         fieldChange(imageDataUrl);
@@ -111,14 +117,15 @@ const AccountProfile = ({ user, btnTitle }: Props) => {
             <FormItem className="flex items-center gap-4">
               <FormLabel className="account-form-image">
                 {field.value ? (
-                  <Image
-                    src={field.value}
-                    alt="profile photo"
-                    width={96}
-                    height={96}
-                    priority
-                    className="rounded-full object-contain"
-                  />
+                  <div className="relative h-[96px] w-[96px] object-cover align-middle">
+                    <Image
+                      src={field.value}
+                      alt="profile photo"
+                      fill
+                      priority
+                      className="rounded-full object-cover"
+                    />
+                  </div>
                 ) : (
                   <CgProfile size={24} className="object-contain" />
                 )}
