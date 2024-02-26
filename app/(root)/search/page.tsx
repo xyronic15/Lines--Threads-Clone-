@@ -47,7 +47,7 @@ const Page = async ({
               ) : (
                 <ProfilesTab
                   currentUserId={user.id}
-                  query={searchParams.q}
+                  query={searchParams.q || ""}
                   type="users"
                 />
               )}
