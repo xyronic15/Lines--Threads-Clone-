@@ -10,7 +10,7 @@ interface Props {
   currentUserId: string;
   accountId?: string;
   query?: string;
-  areReplies: boolean;
+  areReplies?: boolean;
   isSearch?: boolean;
   isCircle?: boolean;
   isHome?: boolean;
@@ -48,13 +48,13 @@ const LinesTab = async ({
     result = { posts: [...personalizedPosts, ...latestPosts] };
     // console.log(result);
   } else if (isSearch) {
-    result = await searchPosts(query);
+    result = await searchPosts(query || "");
   } else if (isCircle) {
-    result = await fetchCirclePosts(accountId);
+    result = await fetchCirclePosts(accountId || "");
   } else if (areReplies) {
-    result = await getReplies(accountId);
+    result = await getReplies(accountId || "");
   } else {
-    result = await fetchUserPosts(accountId);
+    result = await fetchUserPosts(accountId || "");
   }
 
   return (
@@ -89,7 +89,7 @@ const Lines = ({
   return (
     <>
       {results?.posts.length !== 0 ? (
-        results.posts.map((line) => {
+        results.posts.map((line: any) => {
           // check if the post is active or not
           if (!line.active) {
             return;
@@ -153,7 +153,7 @@ const Lines = ({
 const Replies = ({ currentUserId, results }: Props) => {
   return (
     <>
-      {results.map((line) => {
+      {results.map((line: any) => {
         // check if the post is active or not
         if (!line.active) {
           return;
