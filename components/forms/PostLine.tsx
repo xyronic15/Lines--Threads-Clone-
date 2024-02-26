@@ -17,7 +17,7 @@ import MediaCarousel from "@/components/shared/MediaCarousel";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { ChangeEvent, useState } from "react";
+import React, { ChangeEvent, useState } from "react";
 import { IoImageOutline } from "react-icons/io5";
 import { createPost, editPostById } from "@/lib/actions/post.actions";
 
@@ -85,7 +85,7 @@ const PostLine = ({ userId, circleId, line, btnTitle }: Props) => {
 
   // remove media handler
   const removeMedia = (
-    e: MouseEvent<HTMLButtonElement>,
+    e: React.MouseEvent<HTMLButtonElement>,
     index: number,
     fieldChange: (value: string[]) => void
   ) => {

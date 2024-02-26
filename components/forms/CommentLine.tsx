@@ -16,7 +16,7 @@ import {
 import MediaCarousel from "@/components/shared/MediaCarousel";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { ChangeEvent, useState } from "react";
+import React, { ChangeEvent, useState } from "react";
 import { IoImageOutline } from "react-icons/io5";
 import { CommentValidation } from "@/lib/validations/line";
 import { addComment } from "@/lib/actions/post.actions";
@@ -78,7 +78,7 @@ const CommentLine = ({ currentUserId, currentUserImg, postId }: Props) => {
 
   // remove media handler
   const removeMedia = (
-    e: MouseEvent<HTMLButtonElement>,
+    e: React.MouseEvent<HTMLButtonElement>,
     index: number,
     fieldChange: (value: string[]) => void
   ) => {
@@ -91,7 +91,6 @@ const CommentLine = ({ currentUserId, currentUserImg, postId }: Props) => {
 
   //   submit function
   const onSubmit = async (values: z.infer<typeof CommentValidation>) => {
-
     await addComment(
       currentUserId,
       postId,
