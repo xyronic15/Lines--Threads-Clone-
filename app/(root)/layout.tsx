@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { ClerkProvider } from "@clerk/nextjs";
+import { dark } from "@clerk/themes";
 import { Inter } from "next/font/google";
 import "../globals.css";
 import SideBar from "@/components/shared/Sidebar";
@@ -21,7 +22,7 @@ export default function RootLayout({
   return (
     <ClerkProvider
       appearance={{
-        baseTheme: "dark",
+        baseTheme: dark,
       }}
     >
       <html lang="en">
