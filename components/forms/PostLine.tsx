@@ -23,7 +23,7 @@ import { createPost, editPostById } from "@/lib/actions/post.actions";
 
 interface Props {
   userId: string;
-  circleId: string | null;
+  circleId?: string;
   line: {
     id: string;
     text: string;
@@ -98,7 +98,6 @@ const PostLine = ({ userId, circleId, line, btnTitle }: Props) => {
 
   // submit function
   const onSubmit = async (values: z.infer<typeof LineValidation>) => {
-
     // if the route is edit-line then use editPostById
     // else use createPost
     if (pathname === "/edit-line") {
