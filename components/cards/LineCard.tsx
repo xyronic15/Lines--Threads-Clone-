@@ -45,9 +45,9 @@ interface Props {
     name: string;
     image: string;
   } | null;
-  createdAt: string;
+  createdAt: Date;
   adjustedLikes: string[];
-  editedAt: string | null;
+  editedAt: Date | null;
   active: boolean;
   comments: {
     author: {
