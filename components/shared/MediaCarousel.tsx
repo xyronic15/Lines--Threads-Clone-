@@ -52,7 +52,7 @@ const MediaCarousel = ({ media, edit, onClickFunc, onChange }: Props) => {
           })}
       </CarouselContent>
       {/* next and prev buttons only appear when the media length is greater than 1 */}
-      {(media.length > 1 || edit) && (
+      {media && (media.length > 1 || edit) && (
         <>
           <CarouselPrevious className="ml-16" type="button" />
           <CarouselNext className="mr-16" type="button" />

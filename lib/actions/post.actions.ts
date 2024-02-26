@@ -9,11 +9,11 @@ import { connectToDB } from "../mongoose";
 
 // interface params for a post
 interface PostParams {
-  id: string | null;
+  id?: string | null;
   text: string;
-  media: string[];
-  author: string;
-  circleId: string | null;
+  media: string[] | undefined;
+  author?: string;
+  circleId?: string | undefined;
   path: string;
 }
 
