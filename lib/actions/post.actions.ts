@@ -181,7 +181,7 @@ export async function addComment(
   userId: string,
   postId: string,
   text: string,
-  media: string[],
+  media: string[] | undefined,
   path: string
 ) {
   try {
