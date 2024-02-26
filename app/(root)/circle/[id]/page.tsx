@@ -41,7 +41,7 @@ const Page = async ({ params }: { params: { id: string } }) => {
         isFollowingMember={isFollowingMember}
         isCircle
         ownerId={owner.id}
-        admins={admins.map((admin) => admin.id)}
+        admins={admins.map((admin: any) => admin.id)}
         members={members.length}
       />
 

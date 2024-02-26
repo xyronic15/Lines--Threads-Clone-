@@ -26,7 +26,7 @@ const Page = async () => {
     <section className="mt-9 flex flex-col divide-y divide-solid divide-slate-800">
       <h1 className="text-2xl font-bold mb-9">Activity</h1>
 
-      {activity.map((act) => {
+      {activity.map((act: any) => {
         if (act.type === "comment" && act.reply.active) {
           // adjust the likes on the post
           let adjustedLikes = act.reply.likes.map((like: any) => like.id);
@@ -48,6 +48,7 @@ const Page = async () => {
                   name: act.reply.author.name,
                   image: act.reply.author.image,
                 }}
+                circle={null}
                 createdAt={act.reply.createdAt}
                 adjustedLikes={adjustedLikes}
                 editedAt={act.reply.editedAt}
